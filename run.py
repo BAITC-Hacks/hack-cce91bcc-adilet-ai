@@ -12,6 +12,7 @@ def main():
     from src.communities import communities
     from src.roles import assign_roles
     from src.export import export
+    from src.report import write_report
     parser = argparse.ArgumentParser(description='MoneyGraph: observed graph, deterministic v1 rules')
     parser.add_argument('--data', default='./data')
     parser.add_argument('--out', default='./out')
@@ -30,6 +31,8 @@ def main():
     df = stage('communities', communities, graph, df)
     df = stage('roles_priority', assign_roles, df)
     frames = stage('export', export, df, edges, args.out)
+    times['total'] = perf_counter()-started
+    stage('report', write_report, args.data, args.out, df, edges, tx, times)
     times['total'] = perf_counter()-started
     print(json.dumps({'rows': dict(zip(['nodes_roles', 'clusters', 'top_nodes'], map(len, frames))),
                       'edges': len(edges), 'transactions': len(tx), 'sum_kzt': float(edges.sum_kzt.sum()),

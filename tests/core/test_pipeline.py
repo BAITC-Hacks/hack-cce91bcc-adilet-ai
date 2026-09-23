@@ -75,3 +75,11 @@ def test_real_contract():
     assert ((df.in_deg+df.out_deg)==0).sum()==19
     assert df.truncated_by_depth.sum()==444
     validate_outputs(*outputs(df,edges))
+
+
+def test_priority_components_sum_and_seed_temporal_zero():
+    df=calculate(*fixture())
+    parts=[c for c in df if c.startswith('priority_part_')]
+    assert len(parts)==7
+    np.testing.assert_allclose(df[parts].sum(axis=1),df.priority_score,rtol=0,atol=1e-14)
+    assert df.loc[df.is_seed,'priority_part_temporal'].eq(0).all()

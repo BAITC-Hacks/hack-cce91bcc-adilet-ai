@@ -15,6 +15,8 @@ def test_real_app_navigation():
     app.sidebar.radio[0].set_value('Узел и переводы').run()
     assert not app.exception
     assert len(app.metric) == 3
+    assert any('Кто выше' in element.value for element in app.subheader)
+    assert any('Почему такой приоритет' in element.label for element in app.expander)
     app.text_input[0].set_value('unknown').run()
     assert not app.exception and any('не найден' in warning.value for warning in app.warning)
     nodes, clusters, _, _ = load_bundle('data', 'out')
@@ -26,5 +28,9 @@ def test_real_app_navigation():
         gid = clusters.loc[clusters.n_nodes.eq(size), 'cluster_id'].iloc[0]
         app.selectbox[0].set_value(gid).run()
         assert not app.exception and app.metric[0].value == str(int(size))
+    app.sidebar.radio[0].set_value('Проверяемость').run()
+    assert not app.exception
+    if (ROOT / 'out/run_report.json').exists():
+        assert app.success
     app.sidebar.text_input[1].set_value('/tmp/moneygraph-missing-ui-input').run()
     assert not app.exception and app.error and app.code

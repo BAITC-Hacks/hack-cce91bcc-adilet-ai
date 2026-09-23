@@ -36,6 +36,17 @@ def assign_roles(df):
         df[f'score_{role}'] = scores[role]
     central = .5*L(df.pagerank)+.5*L(df.betweenness)
     bridge = .7*L(df.betweenness)+.3*df.scc_size.gt(1)
+    parts = {
+        'centrality': .25*central,
+        'volume': .20*L(np.maximum(df.in_kzt, df.out_kzt)),
+        'structure': .15*scores.drop(columns='terminal').max(axis=1),
+        'multisource': .15*L((df.seed_sources-1).clip(lower=0)),
+        'temporal': .10*df.fast2.where(~df.is_seed, 0),
+        'bridge': .10*bridge,
+        'strength': .05*strength,
+    }
+    for name, values in parts.items():
+        df[f'priority_part_{name}'] = values
     df['priority_score'] = (.25*central+.20*L(np.maximum(df.in_kzt, df.out_kzt))+.15*scores.drop(columns='terminal').max(axis=1)
                             +.15*L((df.seed_sources-1).clip(lower=0))+.10*df.fast2.where(~df.is_seed, 0)+.10*bridge+.05*strength)
     return df

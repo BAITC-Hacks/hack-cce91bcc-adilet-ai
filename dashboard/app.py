@@ -8,6 +8,8 @@ import streamlit as st
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from dashboard.data import load_bundle, signature, node_warnings
 from dashboard.graph import ego_edges, layout, figure
+from dashboard.investigation import upstream, contributions, case_note
+from dashboard.provenance import read_report
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', default='./data')
@@ -20,11 +22,11 @@ data_dir = st.sidebar.text_input('Каталог parquet', args.data)
 out_dir = st.sidebar.text_input('Каталог CSV', args.out)
 st.sidebar.caption('Относительные пути считаются от корня проекта.')
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, max_entries=8)
 def cached_bundle(data_dir, out_dir, version):
     return load_bundle(data_dir, out_dir)
 
-@st.cache_data(show_spinner=False)
+@st.cache_data(show_spinner=False, max_entries=64)
 def cached_layout(gid, edges):
     return layout(gid, edges)
 
@@ -37,7 +39,7 @@ except (OSError, ValueError, KeyError, TypeError) as error:
     st.stop()
 
 st.info('Роль — аналитическая гипотеза. Сила правила (role_score) и приоритет проверки (priority_score) — разные показатели; оба не являются вероятностью правонарушения.')
-section = st.sidebar.radio('Раздел', ['Обзор', 'Узел и переводы', 'Кластеры'])
+section = st.sidebar.radio('Раздел', ['Обзор', 'Узел и переводы', 'Кластеры', 'Проверяемость'])
 if section == 'Обзор':
     columns = st.columns(4)
     for col, label, value in zip(columns, ['Узлы', 'Направленные пары', 'Переводы', 'Кластеры'], [len(nodes), len(edges), int(edges.n_tx.sum()), len(clusters)]):
@@ -62,6 +64,23 @@ elif section == 'Узел и переводы':
     cols[1].metric('Сила правила', f'{row.role_score:.3f}')
     cols[2].metric('Приоритет проверки', f'{row.priority_score:.3f}')
     st.write('**Наблюдения:**', row.evidence)
+    parts = contributions(row)
+    if not parts.empty:
+        with st.expander('Почему такой приоритет: вклад каждого признака'):
+            st.bar_chart(parts.set_index('Компонента'))
+            st.dataframe(parts, hide_index=True, width='stretch')
+            st.caption('Вклады суммируются в priority_score. Это объяснение правила, а не причинности или вероятности.')
+    with st.container(border=True):
+        st.subheader('Кто выше по наблюдаемой цепочке')
+        st.caption('Обратный поиск до 4 шагов: кто может достичь выбранного узла по направлению переводов. В таблице один кратчайший путь на кандидата, до 20 кандидатов по приоритету.')
+        depth = st.slider('Глубина поиска предшественников', 1, 4, 4)
+        candidates = upstream(nodes, edges, gid, cutoff=depth)
+        if candidates.empty:
+            st.info('В выбранной глубине предшественников не найдено. Это не исключает внешние источники вне выборки.')
+        else:
+            st.dataframe(candidates, hide_index=True, width='stretch')
+        st.caption('Путь в графе не доказывает движение одной суммы или общее управление участниками.')
+        st.download_button('Скачать записку для проверки', case_note(row, candidates), f'case_{gid}.md', 'text/markdown')
     for warning in node_warnings(row):
         st.warning(warning)
     st.caption(f'Кластер {row.cluster_id} · глубина {int(row.depth)} · вход {row.in_kzt:,.2f} KZT от {int(row.in_deg)} · выход {row.out_kzt:,.2f} KZT к {int(row.out_deg)} · pass_through {row.pass_through:.3f}')
@@ -80,7 +99,7 @@ elif section == 'Узел и переводы':
     st.dataframe(selected, hide_index=True, width='stretch')
     with st.expander('Все наблюдаемые переводы выбранного узла, без фильтра графа'):
         st.dataframe(edges[edges.src.eq(gid) | edges.dst.eq(gid)], hide_index=True, width='stretch')
-else:
+elif section == 'Кластеры':
     cluster_id = st.selectbox('Кластер', clusters.cluster_id.tolist(), format_func=lambda value: f'Кластер {value} · {int(clusters.loc[clusters.cluster_id.eq(value), "n_nodes"].iloc[0])} узлов')
     row = clusters[clusters.cluster_id.eq(cluster_id)].iloc[0]
     cols = st.columns(3)
@@ -92,3 +111,22 @@ else:
     st.write('**Приоритетные gid:**', row.top_gids)
     members = nodes[nodes.cluster_id.eq(cluster_id)].sort_values(['priority_score','gid'],ascending=[False,True])
     st.dataframe(members[['gid','role','role_score','priority_score','evidence','depth','is_seed']], hide_index=True, width='stretch')
+else:
+    st.subheader('Паспорт расчёта')
+    st.caption('Связывает показанные CSV с конкретным запуском. Хеши проверяют совпадение файлов, а не достоверность исходных сведений.')
+    try:
+        report = read_report(out_dir)
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        st.warning(f'Паспорт недоступен или не соответствует CSV: {error}')
+        st.code('python run.py --data ./data --out ./out')
+    else:
+        st.success('Хеши трёх CSV совпадают с паспортом запуска.')
+        st.write('Версия алгоритма:', report['algorithm'])
+        diagnostics = report['diagnostics']
+        st.write(f"Совпадение топ-20 с простым рейтингом по максимальному входу/выходу: {diagnostics['volume_baseline_top20_overlap']} из 20.")
+        st.caption('Различие с рейтингом по сумме показывает влияние структуры и временных признаков. Оно не доказывает более высокую точность.')
+        sensitivity = pd.DataFrame(list(diagnostics['leave_one_component_out_top20_overlap'].items()), columns=['Исключённый компонент', 'Сохранились в топ-20'])
+        st.dataframe(sensitivity, hide_index=True, width='stretch')
+        st.caption('Чувствительность: исключаем один вклад, остальные веса не меняем. Чем меньше совпадение, тем сильнее рейтинг зависит от компонента.')
+        with st.expander('Параметры, версии и контрольные суммы'):
+            st.json(report)

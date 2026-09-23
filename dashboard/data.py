@@ -67,6 +67,11 @@ def load_bundle(data_dir, out_dir):
     for column in ['fast2', 'in_tx', 'out_tx']:
         if column in nodes:
             numeric(nodes, [column], 'nodes')
+    parts = [column for column in nodes if column.startswith('priority_part_')]
+    if parts:
+        numeric(nodes, parts, 'priority components')
+        if len(parts) != 7 or not np.allclose(nodes[parts].sum(axis=1), nodes.priority_score, atol=1e-12, rtol=0):
+            raise ValueError('Вклады приоритета не совпадают с итогом')
     if 'fast2' in nodes and not nodes.fast2.between(0, 1).all():
         raise ValueError('fast2 вне [0,1]')
     if not nodes.evidence.str.len().le(200).all() or not nodes.evidence.str.contains(r'\d').all():
