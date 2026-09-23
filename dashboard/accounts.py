@@ -1,4 +1,4 @@
-"""SQLite credentials and revocable server-side sessions for local accounts."""
+"""Hashed credentials and revocable sessions in the selected workspace store."""
 import hashlib
 import hmac
 import re
@@ -8,6 +8,7 @@ import time
 
 ITERATIONS = 600_000
 SESSION_SECONDS = 8 * 3600
+REMEMBER_SECONDS = 30 * 24 * 3600
 IDLE_SECONDS = 30 * 60
 ATTEMPT_WINDOW = 15 * 60
 MAX_FAILURES = 5
@@ -57,6 +58,9 @@ class Accounts:
     def __init__(self, store, clock=time.time):
         self.store = store
         self.clock = clock
+        if store.backend == 'mariadb':
+            # MariaStore owns its namespaced schema, including remembered sessions.
+            return
         with store.connect() as db:
             db.executescript('''
                 CREATE TABLE IF NOT EXISTS credentials (
@@ -72,6 +76,10 @@ class Accounts:
                     failures INTEGER NOT NULL, window_start REAL NOT NULL,
                     PRIMARY KEY(action, identity));
             ''')
+
+            columns = {row['name'] for row in db.execute('PRAGMA table_info(sessions)')}
+            if 'remembered' not in columns:
+                db.execute('ALTER TABLE sessions ADD COLUMN remembered INTEGER NOT NULL DEFAULT 0')
 
     def _limited(self, db, action, email):
         row = db.execute('SELECT * FROM auth_limits WHERE action=? AND identity=?', (action, email)).fetchone()
@@ -104,7 +112,7 @@ class Accounts:
             raise AccountError('Не удалось создать аккаунт с этим email. Попробуйте войти или восстановить доступ.') from None
         return recovery
 
-    def login(self, email, password):
+    def login(self, email, password, remember=False):
         email = normalize_email(email)
         token = None
         with self.store.connect() as db:
@@ -118,8 +126,9 @@ class Accounts:
             if valid and row:
                 now = self.clock()
                 token = secrets.token_urlsafe(32)
-                db.execute('DELETE FROM sessions WHERE expires_at<=? OR last_seen<=?', (now, now-IDLE_SECONDS))
-                db.execute('INSERT INTO sessions VALUES(?,?,?,?)', (token_hash(token), row['id'], now+SESSION_SECONDS, now))
+                db.execute('DELETE FROM sessions WHERE expires_at<=? OR (remembered=0 AND last_seen<=?)', (now, now-IDLE_SECONDS))
+                db.execute('INSERT INTO sessions(token_hash,user_id,expires_at,last_seen,remembered) VALUES(?,?,?,?,?)',
+                    (token_hash(token), row['id'], now+(REMEMBER_SECONDS if remember else SESSION_SECONDS), now, int(remember)))
                 db.execute("DELETE FROM auth_limits WHERE action='login' AND identity=?", (email,))
                 db.execute('INSERT INTO events(user_id,action,details) VALUES(?,?,?)', (row['id'], 'Вход в аккаунт', ''))
             else:
@@ -133,9 +142,10 @@ class Accounts:
             return None
         now = self.clock()
         with self.store.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
             row = db.execute('''SELECT users.id,users.email,users.name FROM sessions
                 JOIN users ON users.id=sessions.user_id
-                WHERE token_hash=? AND expires_at>? AND last_seen>?''',
+                WHERE token_hash=? AND expires_at>? AND (remembered=1 OR last_seen>?)''',
                 (token_hash(token), now, now-IDLE_SECONDS)).fetchone()
             if row:
                 db.execute('UPDATE sessions SET last_seen=? WHERE token_hash=?', (now, token_hash(token)))
@@ -143,6 +153,7 @@ class Accounts:
 
     def logout(self, token, all_sessions=False):
         with self.store.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
             row = db.execute('SELECT user_id FROM sessions WHERE token_hash=?', (token_hash(token),)).fetchone()
             if row:
                 if all_sessions:
@@ -187,7 +198,7 @@ class Accounts:
         with self.store.connect() as db:
             db.execute('BEGIN IMMEDIATE')
             # Recheck after acquiring the write lock, including revocation.
-            session = db.execute('SELECT 1 FROM sessions WHERE token_hash=? AND expires_at>? AND last_seen>?',
+            session = db.execute('SELECT 1 FROM sessions WHERE token_hash=? AND expires_at>? AND (remembered=1 OR last_seen>?)',
                 (token_hash(token), self.clock(), self.clock()-IDLE_SECONDS)).fetchone()
             if not session:
                 raise AccountError('Сессия истекла. Войдите снова.')

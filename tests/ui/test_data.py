@@ -3,7 +3,7 @@ import shutil
 import numpy as np
 import pandas as pd
 import pytest
-from dashboard.data import ROOT, load_bundle, node_warnings
+from dashboard.data import ROOT, load_bundle, load_files_bundle, node_warnings, signature
 from dashboard.graph import ego_edges, layout
 
 
@@ -79,3 +79,42 @@ def test_bounded_directed_graph(real):
     filtered, _ = ego_edges(edges, gid, minimum=edges.sum_kzt.max() + 1)
     assert filtered.empty
     assert nodes[nodes.gid.eq('unknown')].empty
+
+
+def test_complete_file_snapshot_matches_rendered_data(real):
+    bundle, files = load_files_bundle('data', 'out')
+    assert len(files) == 6
+    assert len(signature('data', 'out')) == 6
+    for actual, expected in zip(bundle, real):
+        pd.testing.assert_frame_equal(actual, expected)
+    for name, content in files.items():
+        assert content == (ROOT / name).read_bytes()
+
+
+def test_file_snapshot_rejects_concurrent_pipeline_write(monkeypatch):
+    versions = iter([(('before', 1, 1),), (('after', 2, 1),)])
+    monkeypatch.setattr('dashboard.data.signature', lambda *_: next(versions))
+    with pytest.raises(ValueError, match='обновились во время чтения'):
+        load_files_bundle('data', 'out')
+
+
+@pytest.mark.parametrize('problem', ['amount', 'missing_file', 'isolated_node'])
+def test_file_snapshot_checks_raw_data(tmp_path, problem):
+    data_dir = tmp_path / 'data'
+    data_dir.mkdir()
+    for name in ('nodes', 'edges', 'transactions'):
+        shutil.copy(ROOT / 'data' / f'{name}.parquet', data_dir)
+    if problem == 'missing_file':
+        (data_dir / 'transactions.parquet').unlink()
+    elif problem == 'amount':
+        frame = pd.read_parquet(data_dir / 'transactions.parquet')
+        frame.loc[0, 'sum_kzt'] += 1000
+        frame.to_parquet(data_dir / 'transactions.parquet', index=False)
+    else:
+        frame = pd.read_parquet(data_dir / 'nodes.parquet')
+        edges = pd.read_parquet(data_dir / 'edges.parquet')
+        isolated = frame[~frame.gid.isin(set(edges.src) | set(edges.dst))].index[0]
+        frame = frame.drop(index=isolated)
+        frame.to_parquet(data_dir / 'nodes.parquet', index=False)
+    with pytest.raises((ValueError, OSError)):
+        load_files_bundle(data_dir, ROOT / 'out')

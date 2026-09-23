@@ -4,12 +4,36 @@ from hashlib import sha256
 from pathlib import Path
 import json
 import sqlite3
+import os
+
+
+class StorageError(RuntimeError):
+    """A safe, user-facing storage failure without credentials or SQL values."""
+
+
+def open_store(root=None):
+    """Select configured MariaDB; an explicit MONEYGRAPH_DB selects SQLite.
+
+    A configured but unavailable MariaDB is an error, never an empty fallback.
+    """
+    root = Path(root) if root is not None else Path(__file__).resolve().parents[1]
+    explicit = os.environ.get('MONEYGRAPH_DB')
+    if explicit:
+        return Store(explicit)
+    from dashboard.maria_storage import MariaStore, configured
+    config = configured(root / '.env')
+    return MariaStore(config) if config else Store(root / 'data/moneygraph.sqlite3')
 
 
 class Store:
+    backend = 'sqlite'
+
     def __init__(self, path):
         self.path = Path(path)
-        self.path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            raise StorageError('Не удалось открыть локальное хранилище. Проверьте путь и права доступа.') from None
         with self.connect() as db:
             db.executescript('''
                 CREATE TABLE IF NOT EXISTS users (
@@ -39,14 +63,20 @@ class Store:
 
     @contextmanager
     def connect(self):
-        db = sqlite3.connect(self.path, timeout=15)
-        db.row_factory = sqlite3.Row
-        db.execute('PRAGMA foreign_keys = ON')
+        db = None
         try:
+            db = sqlite3.connect(self.path, timeout=15)
+            db.row_factory = sqlite3.Row
+            db.execute('PRAGMA foreign_keys = ON')
             with db:
                 yield db
+        except sqlite3.IntegrityError:
+            raise
+        except sqlite3.Error:
+            raise StorageError('Локальное хранилище недоступно. Проверьте файл и повторите действие.') from None
         finally:
-            db.close()
+            if db is not None:
+                db.close()
 
     def user(self, issuer, subject, email, name):
         if not issuer or not subject:

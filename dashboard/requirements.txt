@@ -1,3 +1,7 @@
 # Install after the root requirements.txt. UI dependencies only.
 streamlit==1.64.0
 plotly==6.9.0
+
+# Optional AI transport and strict local schema validation (also used by tests).
+requests==2.34.2
+jsonschema==4.26.0

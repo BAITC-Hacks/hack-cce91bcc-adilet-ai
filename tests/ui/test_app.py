@@ -10,6 +10,8 @@ PASSWORD = 'correct horse battery staple'
 
 
 def register_and_login(app, email='analyst@example.test'):
+    if any(b.key == 'welcome_register' for b in app.button):
+        app.button(key='welcome_register').click().run()
     app.radio(key='auth_mode').set_value('Регистрация').run()
     app.text_input(key='register_name').set_value('Аналитик')
     app.text_input(key='register_email').set_value(email)
@@ -24,6 +26,8 @@ def register_and_login(app, email='analyst@example.test'):
 
 
 def login(app, email='analyst@example.test', password=PASSWORD):
+    if any(b.key == 'welcome_login' for b in app.button):
+        app.button(key='welcome_login').click().run()
     app.text_input(key='login_email').set_value(email)
     app.text_input(key='login_password').set_value(password)
     next(b for b in app.button if b.label == 'Войти').click().run()
@@ -140,3 +144,35 @@ def test_forged_session_has_no_access(monkeypatch, tmp_path):
     app.run()
     assert not app.exception and not app.dataframe and not app.metric
     assert app.text_input(key='login_email') is not None
+
+
+def test_welcome_navigation_and_failed_login_email(monkeypatch, tmp_path):
+    monkeypatch.setenv('MONEYGRAPH_DB', str(tmp_path / 'welcome.db'))
+    app = AppTest.from_file(str(ROOT / 'dashboard/app.py'), default_timeout=30).run()
+    assert not app.exception and not app.text_input and not app.dataframe
+    app.button(key='welcome_login').click().run()
+    assert app.checkbox[0].label == 'Запомнить меня на 30 дней'
+    login(app, 'absent@example.test', 'wrong password')
+    assert app.error and app.text_input(key='login_email').value == 'absent@example.test'
+    app.button(key='auth_back').click().run()
+    assert not app.text_input
+    app.button(key='welcome_register').click().run()
+    assert app.text_input(key='register_repeat') and not app.exception
+
+
+def test_browser_token_restores_only_valid_account(monkeypatch, tmp_path):
+    from types import SimpleNamespace
+    from dashboard.accounts import Accounts
+    from dashboard.storage import Store
+    db = tmp_path / 'remember.db'
+    monkeypatch.setenv('MONEYGRAPH_DB', str(db))
+    accounts = Accounts(Store(db))
+    accounts.register('Remembered', 'remember@example.test', PASSWORD)
+    token = accounts.login('remember@example.test', PASSWORD, remember=True)
+    monkeypatch.setattr('dashboard.auth.browser_session', lambda: SimpleNamespace(token=token))
+    app = AppTest.from_file(str(ROOT / 'dashboard/app.py'), default_timeout=30).run()
+    assert not app.exception and app.button(key='logout')
+    accounts.logout(token)
+    fresh = AppTest.from_file(str(ROOT / 'dashboard/app.py'), default_timeout=30).run()
+    assert not fresh.exception and not fresh.dataframe
+    assert fresh.button(key='welcome_login')

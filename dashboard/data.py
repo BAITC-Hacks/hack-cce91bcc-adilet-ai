@@ -1,5 +1,6 @@
 """Read-only UI contract validation; identifiers never pass through float."""
 from pathlib import Path
+from io import BytesIO
 import numpy as np
 import pandas as pd
 
@@ -44,6 +45,11 @@ def load_bundle(data_dir, out_dir):
     nodes = pd.read_csv(out_dir / 'nodes_roles.csv', dtype=str, keep_default_na=False)
     clusters = pd.read_csv(out_dir / 'clusters.csv', dtype=str, keep_default_na=False)
     top = pd.read_csv(out_dir / 'top_nodes.csv', dtype=str, keep_default_na=False)
+    edges = pd.read_parquet(data_dir / 'edges.parquet')
+    return _validate_bundle(nodes, clusters, top, edges)
+
+
+def _validate_bundle(nodes, clusters, top, edges):
     for frame, cols, name in [(nodes, NODE_COLUMNS, 'nodes_roles'), (clusters, CLUSTER_COLUMNS, 'clusters'), (top, TOP_COLUMNS, 'top_nodes')]:
         require(frame, cols, name)
     for frame in [nodes, top]:
@@ -97,7 +103,6 @@ def load_bundle(data_dir, out_dir):
             raise ValueError('Количество узлов/seed кластера не совпадает')
         if not set(row.top_gids.split(';')) <= set(members.gid):
             raise ValueError('top_gids вне своего кластера')
-    edges = pd.read_parquet(data_dir / 'edges.parquet')
     require(edges, ['src', 'dst', 'sum_kzt', 'n_tx'], 'edges')
     for column in ['src', 'dst']:
         edges[column] = identifiers(edges[column], column)
@@ -116,8 +121,45 @@ def load_bundle(data_dir, out_dir):
 
 def signature(data_dir, out_dir):
     paths = [resolve_path(out_dir) / name for name in ['nodes_roles.csv', 'clusters.csv', 'top_nodes.csv']]
-    paths.append(resolve_path(data_dir) / 'edges.parquet')
-    return tuple((str(path), path.stat().st_mtime_ns, path.stat().st_size) for path in paths)
+    paths.extend(resolve_path(data_dir) / f'{name}.parquet' for name in ('nodes', 'edges', 'transactions'))
+    result = []
+    for path in paths:
+        stat = path.stat()
+        result.append((str(path), stat.st_mtime_ns, stat.st_size))
+    return tuple(result)
+
+
+def load_files_bundle(data_dir, out_dir):
+    """Capture and validate all six files once, including raw transfer consistency.
+
+    The returned UI frames and archived/AI bytes represent the same file version.
+    A concurrent pipeline write produces an explicit retry instead of mixed data.
+    """
+    from src.load import validate
+
+    data_dir, out_dir = resolve_path(data_dir), resolve_path(out_dir)
+    before = signature(data_dir, out_dir)
+    files = {f'data/{name}.parquet': (data_dir / f'{name}.parquet').read_bytes()
+             for name in ('nodes', 'edges', 'transactions')}
+    files.update({f'out/{name}.csv': (out_dir / f'{name}.csv').read_bytes()
+                  for name in ('nodes_roles', 'clusters', 'top_nodes')})
+    if signature(data_dir, out_dir) != before:
+        raise ValueError('Файлы обновились во время чтения. Дождитесь завершения расчёта и повторите загрузку.')
+    raw_nodes, raw_edges, tx = [pd.read_parquet(BytesIO(files[f'data/{name}.parquet']))
+                               for name in ('nodes', 'edges', 'transactions')]
+    tx['date'] = pd.to_datetime(tx.date, errors='raise')
+    validate(raw_edges, raw_nodes, tx)
+    outputs = [pd.read_csv(BytesIO(files[f'out/{name}.csv']), dtype=str, keep_default_na=False)
+               for name in ('nodes_roles', 'clusters', 'top_nodes')]
+    bundle = _validate_bundle(*outputs, raw_edges)
+    nodes = bundle[0].set_index('gid')
+    source = raw_nodes.assign(gid=raw_nodes.gid.astype(str)).set_index('gid')
+    if set(source.index) != set(nodes.index):
+        raise ValueError('Узлы исходного parquet не совпадают с nodes_roles.csv. Повторите расчёт.')
+    source = source.loc[nodes.index]
+    if not np.array_equal(source.depth, nodes.depth) or not np.array_equal(source.is_seed, nodes.is_seed):
+        raise ValueError('Глубина или seed в исходном parquet не совпадают с CSV. Повторите расчёт.')
+    return bundle, files
 
 
 def node_warnings(row):

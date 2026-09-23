@@ -2,7 +2,7 @@
 export default function ({ parentElement, data, setTriggerValue }) {
   const root = parentElement;
   const rows = data.rows || [];
-  const labels = { consolidator: 'Консолидатор', transit: 'Транзитный', distributor: 'Распределитель', terminal: 'Конечный', coordinator: 'Координатор', peripheral: 'Периферийный' };
+  const labels = { consolidator: 'Сборщик средств', transit: 'Транзитный участник', distributor: 'Распределитель', terminal: 'Конечный получатель', coordinator: 'Координатор связей', peripheral: 'Периферийный участник' };
   const search = root.querySelector('input');
   const select = root.querySelector('select');
   const body = root.querySelector('tbody');

@@ -16,6 +16,7 @@ def main():
     parser = argparse.ArgumentParser(description='MoneyGraph: observed graph, deterministic v1 rules')
     parser.add_argument('--data', default='./data')
     parser.add_argument('--out', default='./out')
+    parser.add_argument('--mysql', action='store_true', help='Also publish a versioned snapshot to MariaDB using MYSQL_* settings')
     args = parser.parse_args()
     times = {'imports': perf_counter()-started}
     def stage(name, fn, *values):
@@ -33,10 +34,14 @@ def main():
     frames = stage('export', export, df, edges, args.out)
     times['total'] = perf_counter()-started
     stage('report', write_report, args.data, args.out, df, edges, tx, times)
+    database = None
+    if args.mysql:
+        from src.database import publish
+        database = stage('mysql', publish, edges, nodes, tx, frames)
     times['total'] = perf_counter()-started
     print(json.dumps({'rows': dict(zip(['nodes_roles', 'clusters', 'top_nodes'], map(len, frames))),
                       'edges': len(edges), 'transactions': len(tx), 'sum_kzt': float(edges.sum_kzt.sum()),
-                      'roles': df.role.value_counts().to_dict(), 'seconds': times}, ensure_ascii=False, indent=2))
+                      'roles': df.role.value_counts().to_dict(), 'database': database, 'seconds': times}, ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':
