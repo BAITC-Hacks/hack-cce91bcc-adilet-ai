@@ -14,19 +14,19 @@ from dashboard.provenance import read_report
 from dashboard.storage import Store
 from dashboard.auth import require_identity, account_controls
 from dashboard.data import ROOT, resolve_path
-from dashboard.ai.ui import investigation_panel
+from dashboard.ui import apply_theme, brand, page_header, metrics, priority_table, NAV
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', default='./data')
 parser.add_argument('--out', default='./out')
 args, _ = parser.parse_known_args()
 st.set_page_config(page_title='MoneyGraph · Рабочее пространство', page_icon=':material/hub:', layout='wide')
+apply_theme()
 store = Store(os.environ.get('MONEYGRAPH_DB', str(ROOT / 'data/moneygraph.sqlite3')))
 identity = require_identity(store)
 user_id = identity['id']
-st.sidebar.title('MoneyGraph')
-st.sidebar.caption('FREEDOM STYLE · HACKALEM AI')
-section = st.sidebar.radio('Раздел', ['Обзор', 'Узел и переводы', 'Кластеры', 'Мои проверки', 'Проверяемость'], key='section')
+brand(sidebar=True)
+section = st.sidebar.radio('Рабочее пространство', list(NAV), format_func=NAV.get, key='section')
 with st.sidebar.expander('Источник данных', icon=':material/database:'):
     data_dir = st.text_input('Каталог parquet', args.data)
     out_dir = st.text_input('Каталог CSV', args.out)
@@ -38,9 +38,7 @@ def open_node(gid):
     st.session_state['node_gid'] = str(gid)
     st.session_state['section'] = 'Узел и переводы'
 
-st.badge('Рабочее пространство аналитика', color='green', icon=':material/hub:')
-st.title({'Обзор': 'Вся картина движения денег', 'Узел и переводы': 'От перевода к связям', 'Кластеры': 'Связанные сообщества', 'Мои проверки': 'Ваши проверки', 'Проверяемость': 'Данные, которым можно задать вопрос'}[section])
-st.caption('Июль 2026 · наблюдаемые переводы · гипотезы для проверки')
+page_header(section, identity)
 
 @st.cache_data(show_spinner=False, max_entries=8)
 def cached_bundle(data_dir, out_dir, version):
@@ -56,34 +54,35 @@ try:
     files.update({f'out/{name}.csv': (resolve_path(out_dir) / f'{name}.csv').read_bytes() for name in ('nodes_roles', 'clusters', 'top_nodes')})
     dataset_id = store.snapshot(files)
 except (OSError, ValueError, KeyError, TypeError) as error:
-    st.error(f'Не удалось загрузить данные: {error}')
-    st.info('Проверьте пути и сформируйте три CSV из исходного датасета:')
-    st.code('python run.py --data ./data --out ./out', language='bash')
+    if section == 'Обзор':
+        metrics()
+        priority_table()
+    st.info('Подключите данные, чтобы начать проверку. Укажите каталоги в боковой панели «Источник данных».')
+    with st.expander('Подробности загрузки и команда расчёта'):
+        st.error(f'Не удалось загрузить данные: {error}')
+        st.code('python run.py --data ./data --out ./out', language='bash')
     st.stop()
 
-st.caption('Роль — гипотеза. Приоритет проверки и сила правила не являются вероятностью правонарушения.')
 if section == 'Обзор':
-    columns = st.columns(4)
-    for col, label, value in zip(columns, ['Узлы', 'Направленные пары', 'Переводы', 'Кластеры'], [len(nodes), len(edges), int(edges.n_tx.sum()), len(clusters)]):
-        with col.container(border=True):
-            st.metric(label, f'{value:,}'.replace(',', ' '))
+    metrics([len(nodes), len(edges), int(edges.n_tx.sum()), len(clusters)])
     st.caption(f'Наблюдаемый оборот: {edges.sum_kzt.sum():,.2f} KZT · seed: {nodes.is_seed.sum()} · изолированные seed: {(nodes.is_seed & nodes.in_deg.eq(0) & nodes.out_deg.eq(0)).sum()}')
-    with st.container(border=True):
+    priority_table(top, nodes, dataset_id)
+    with st.expander('Быстрый переход к узлу'):
         st.subheader('С чего начать проверку', icon=':material/travel_explore:')
         st.write('Откройте приоритетный узел, изучите входящие связи и сохраните выводы в проверку.')
         focus = st.selectbox('Приоритетный узел', top.gid.tolist(), key='focus_gid')
         st.button('Исследовать узел', type='primary', icon=':material/arrow_forward:', on_click=open_node, args=(focus,))
-    st.subheader('Приоритет проверки')
-    st.caption('Выше — узлы с большим приоритетом ручной проверки. Сортировка доступна по заголовкам.')
-    st.dataframe(top, hide_index=True, width='stretch', column_config={'gid':st.column_config.TextColumn('gid'), 'priority_score':st.column_config.ProgressColumn('Приоритет проверки',format='%.3f',min_value=0,max_value=1)})
-    st.download_button('Скачать показанную таблицу', top.to_csv(index=False).encode('utf-8'), 'top_nodes.csv', 'text/csv')
+    with st.expander('Исходная таблица и экспорт CSV'):
+        st.caption('Полный список приоритетных узлов, без фильтров JavaScript-таблицы.')
+        st.dataframe(top, hide_index=True, width='stretch', column_config={'gid':st.column_config.TextColumn('gid'), 'priority_score':st.column_config.ProgressColumn('Приоритет проверки',format='%.3f',min_value=0,max_value=1)})
+        st.download_button('Скачать полный список CSV', top.to_csv(index=False).encode('utf-8'), 'top_nodes.csv', 'text/csv')
     left, right = st.columns(2)
     with left, st.container(border=True):
         st.subheader('Роли в наблюдаемом графе')
-        st.bar_chart(nodes.role.value_counts().rename('Узлы'), color='#247A38')
+        st.bar_chart(nodes.role.value_counts().rename('Узлы'), color='#19ac99')
     with right, st.container(border=True):
         st.subheader('Глубина наблюдения')
-        st.bar_chart(nodes.depth.value_counts().sort_index().rename('Узлы'), color='#83BA3B')
+        st.bar_chart(nodes.depth.value_counts().sort_index().rename('Узлы'), color='#365d78')
     st.subheader('Ограничения выборки')
     st.write('Граф построен по исходящим переводам от seed до 4 колен. Входящие seed неполны; исходящие за границей глубины неизвестны. Все суммы относятся только к наблюдаемой выборке. В транзакциях есть дата, но нет времени суток: совпадение дня не доказывает порядок и путь конкретных денег.')
 elif section == 'Узел и переводы':

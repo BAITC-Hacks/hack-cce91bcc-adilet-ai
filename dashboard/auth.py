@@ -18,10 +18,16 @@ def require_identity(store):
         st.info('Сессия завершена. Войдите снова.')
     left, right = st.columns([3, 2], gap='large')
     with left:
-        st.badge('MoneyGraph · HackAlem AI', icon=':material/hub:', color='green')
-        st.title('Деньги движутся.\nСвязи становятся видны.')
-        st.write('Исследуйте переводы и сохраняйте результаты в личном рабочем пространстве.')
-        st.caption('Собственный аккаунт · личные проверки · история работы')
+        st.html('''<div class="mg-login">
+            <div class="mg-brand"><span class="mg-logo" aria-hidden="true">◈</span>
+              <div><strong>MoneyGraph</strong><small>ANALYTICS / WORKSPACE</small></div></div>
+            <span class="mg-login-tag">РАБОЧЕЕ ПРОСТРАНСТВО АНАЛИТИКА</span>
+            <h1>Деньги движутся.<br>Связи становятся видны.</h1>
+            <p>Исследуйте переводы, находите связи и сохраняйте результаты
+            в личном рабочем пространстве.</p>
+            <div class="mg-login-grid"><span>◇ &nbsp; Граф переводов</span>
+            <span>▤ &nbsp; Личные проверки</span><span>↗ &nbsp; Проверяемые выводы</span></div>
+            </div>''')
     with right, st.container(border=True):
         st.subheader('Ваше рабочее пространство')
         if st.session_state.get('_recovery_code'):

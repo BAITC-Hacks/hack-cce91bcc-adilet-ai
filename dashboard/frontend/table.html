@@ -1,0 +1,20 @@
+<section class="panel" aria-label="Узлы для проверки">
+  <div class="panel-head">
+    <div><h2>Приоритетные узлы</h2><p>Кандидаты для проверки в наблюдаемом графе</p></div>
+    <div class="tools">
+      <label class="search"><span aria-hidden="true">⌕</span><input type="search" aria-label="Поиск по ID узла" placeholder="Поиск по ID узла" autocomplete="off"></label>
+      <select aria-label="Фильтр по роли"><option value="">Все роли</option></select>
+    </div>
+  </div>
+  <div class="table-scroll" tabindex="0" role="region" aria-label="Таблица приоритетных узлов">
+    <table><thead><tr>
+      <th scope="col">ID УЗЛА</th><th scope="col">РОЛЬ · ГИПОТЕЗА</th>
+      <th scope="col" data-sort="amount"><button type="button">ВХОДЯЩАЯ СУММА <span aria-hidden="true">↕</span></button></th>
+      <th scope="col" data-sort="score" aria-sort="descending"><button type="button">ПРИОРИТЕТ <span aria-hidden="true">↓</span></button></th>
+      <th scope="col">ДЕЙСТВИЕ</th>
+    </tr></thead><tbody></tbody></table>
+  </div>
+  <div class="empty" hidden><span aria-hidden="true">⌕</span><h3></h3><p></p><button type="button" class="reset">Сбросить фильтры</button></div>
+  <footer><span class="count" role="status" aria-live="polite"></span><div class="paging"><button type="button" class="prev" aria-label="Предыдущая страница">←</button><span class="page"></span><button type="button" class="next" aria-label="Следующая страница">→</button></div></footer>
+</section>
+<p class="disclaimer">Приоритет — очерёдность ручной проверки, а не вероятность правонарушения.</p>
