@@ -18,7 +18,6 @@ NAV = {'Обзор': ':material/grid_view: Обзор', 'Узел и перев�
        'Проверяемость': ':material/description: Проверяемость'}
 
 
-@st.cache_resource
 def table_component():
     return components.component(
         'moneygraph_priority_table',

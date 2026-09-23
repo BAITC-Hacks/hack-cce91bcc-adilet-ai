@@ -1,34 +1,39 @@
 """Email/password UI backed by validated, revocable SQLite sessions."""
 import streamlit as st
+from dashboard.welcome import landing, browser_session
 from dashboard.accounts import Accounts, AccountError
 
 
 def clear_session():
     for key in list(st.session_state):
         del st.session_state[key]
+    st.session_state['_auth_page'] = True
+    st.session_state['_browser_action'] = {'action': 'clear'}
 
 
 def require_identity(store):
     accounts = Accounts(store)
+    browser = browser_session()
+    if not st.session_state.get('_auth_token') and browser.token and not st.session_state.get('_browser_action'):
+        candidate = accounts.identity(browser.token)
+        if candidate:
+            st.session_state['_auth_token'] = browser.token
+        else:
+            st.session_state['_browser_action'] = {'action': 'clear'}
+            st.rerun()
     identity = accounts.identity(st.session_state.get('_auth_token'))
     if identity:
         return identity
     if st.session_state.get('_auth_token'):
         clear_session()
         st.info('Сессия завершена. Войдите снова.')
-    left, right = st.columns([3, 2], gap='large')
-    with left:
-        st.html('''<div class="mg-login">
-            <div class="mg-brand"><span class="mg-logo" aria-hidden="true">◈</span>
-              <div><strong>MoneyGraph</strong><small>ANALYTICS / WORKSPACE</small></div></div>
-            <span class="mg-login-tag">РАБОЧЕЕ ПРОСТРАНСТВО АНАЛИТИКА</span>
-            <h1>Деньги движутся.<br>Связи становятся видны.</h1>
-            <p>Исследуйте переводы, находите связи и сохраняйте результаты
-            в личном рабочем пространстве.</p>
-            <div class="mg-login-grid"><span>◇ &nbsp; Граф переводов</span>
-            <span>▤ &nbsp; Личные проверки</span><span>↗ &nbsp; Проверяемые выводы</span></div>
-            </div>''')
-    with right, st.container(border=True):
+    if not st.session_state.get('_auth_page'):
+        landing()
+        st.stop()
+    with st.container(key='auth_center'):
+        if st.button('На главную', icon=':material/arrow_back:', key='auth_back'):
+            st.session_state.pop('_auth_page', None)
+            st.rerun()
         st.subheader('Ваше рабочее пространство')
         if st.session_state.get('_recovery_code'):
             st.success('Пароль сохранён. Сохраните резервный код перед входом.')
@@ -38,27 +43,29 @@ def require_identity(store):
                 clear_session()
                 st.rerun()
             st.stop()
-        mode = st.radio('Доступ', ['Вход', 'Регистрация', 'Восстановление'], key='auth_mode')
+        mode = st.radio('Доступ', ['Вход', 'Регистрация', 'Восстановление'], key='auth_mode', horizontal=True)
         if mode == 'Вход':
-            with st.form('login', clear_on_submit=True):
-                email = st.text_input('Email', key='login_email', max_chars=254)
-                password = st.text_input('Пароль', type='password', key='login_password', max_chars=128)
+            with st.form('login'):
+                email = st.text_input('Email', key='login_email', max_chars=254, autocomplete='username', placeholder='you@example.com')
+                password = st.text_input('Пароль', type='password', key='login_password', max_chars=128, autocomplete='current-password')
+                remember = st.checkbox('Запомнить меня на 30 дней', help='Только на личном устройстве. Пароль не сохраняется.')
                 submitted = st.form_submit_button('Войти', type='primary', width='stretch')
             if submitted:
                 try:
-                    token = accounts.login(email, password)
+                    token = accounts.login(email, password, remember=remember)
                 except AccountError as error:
                     st.error(str(error))
                 else:
                     clear_session()
                     st.session_state['_auth_token'] = token
+                    st.session_state['_browser_action'] = {'action': 'save' if remember else 'clear', 'token': token if remember else ''}
                     st.rerun()
         elif mode == 'Регистрация':
             with st.form('register', clear_on_submit=True):
                 name = st.text_input('Имя', key='register_name', max_chars=80)
-                email = st.text_input('Email', key='register_email', max_chars=254)
-                password = st.text_input('Пароль', type='password', key='register_password', max_chars=128, help='От 15 до 128 символов. Подойдёт длинная фраза.')
-                repeat = st.text_input('Повторите пароль', type='password', key='register_repeat', max_chars=128)
+                email = st.text_input('Email', key='register_email', max_chars=254, autocomplete='username')
+                password = st.text_input('Пароль', type='password', key='register_password', max_chars=128, autocomplete='new-password', help='От 15 до 128 символов. Подойдёт длинная фраза.')
+                repeat = st.text_input('Повторите пароль', type='password', key='register_repeat', max_chars=128, autocomplete='new-password')
                 submitted = st.form_submit_button('Создать аккаунт', type='primary', width='stretch')
             if submitted:
                 try:

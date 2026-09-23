@@ -104,3 +104,21 @@ def test_reset_rate_limit_and_legacy_preservation(service):
     identity = accounts.identity(accounts.login('new@example.test', PASSWORD))
     assert accounts.store.cases(identity['id']) == []
     assert accounts.store.cases(legacy)[0]['note'] == 'Old note'
+
+
+def test_remembered_session_expiry_and_revocation(service):
+    from dashboard.accounts import REMEMBER_SECONDS
+    accounts, now = service
+    accounts.register('First', 'first@example.test', PASSWORD)
+    regular = accounts.login('first@example.test', PASSWORD)
+    remembered = accounts.login('first@example.test', PASSWORD, remember=True)
+    now[0] += IDLE_SECONDS + 1
+    assert accounts.identity(regular) is None
+    assert accounts.identity(remembered)
+    accounts.login('first@example.test', PASSWORD)  # Cleanup must preserve remembered sessions.
+    assert accounts.identity(remembered)
+    accounts.logout(remembered)
+    assert accounts.identity(remembered) is None
+    remembered = accounts.login('first@example.test', PASSWORD, remember=True)
+    now[0] += REMEMBER_SECONDS
+    assert accounts.identity(remembered) is None

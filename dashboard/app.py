@@ -13,6 +13,7 @@ from dashboard.investigation import upstream, contributions, case_note
 from dashboard.provenance import read_report
 from dashboard.storage import Store
 from dashboard.auth import require_identity, account_controls
+from dashboard.ai.ui import investigation_panel
 from dashboard.data import ROOT, resolve_path
 from dashboard.ui import apply_theme, brand, page_header, metrics, priority_table, NAV
 

@@ -202,3 +202,30 @@ AppTest успешно выполняет обзор, карточку, неиз
 Время CORE по последней документированной проверке: 3.54 с первый запуск,
 2.78 с повторный. UI не добавляет алгоритмов CORE или нативных зависимостей.
 Ветка/коммит не создавались; данные и результаты не публиковались.
+
+## Стартовая страница и вход
+
+Стартовый экран показывает обложку с цепью, кнопки «Войти» / «Создать аккаунт»,
+описание возможностей и стек. Формы входа, регистрации и восстановления находятся
+по центру; «На главную» возвращает обложку. Email при ошибке входа сохраняется,
+поля поддерживают автозаполнение менеджером паролей браузера.
+
+«Запомнить меня на 30 дней» сохраняет случайный отзывной токен в localStorage
+текущего браузера и origin; пароль там не хранится. На сервере хранится хеш токена.
+Абсолютный срок — 30 дней, обычная сессия — 8 часов с таймаутом бездействия 30 минут.
+Выход отзывает текущую сессию, смена/восстановление пароля и выход на всех устройствах
+отзывают все сессии. При запрете browser storage показывается сообщение, текущий
+вход продолжает работать. Токен доступен JavaScript этого origin; запоминание следует
+использовать на личном устройстве. AppTest не исполняет браузерный JavaScript.
+
+Обложка: `dashboard/frontend/chain-hero.png`, создана встроенным `imagegen`.
+Промпт: “Create a premium wide website hero image for MoneyGraph financial graph
+analytics. Photorealistic macro 3D render of interlocking brushed titanium and
+translucent teal glass chain links gracefully curving through space, with subtle
+glowing connecting nodes suggesting money transfer networks. Deep midnight navy
+background, sophisticated emerald teal rim lighting, elegant minimal composition,
+wide panoramic crop, no text, no lettering, no logos. Save output for use as a
+website asset.”
+
+Запуск: `.venv/bin/streamlit run dashboard/app.py`.
+Проверка: `.venv/bin/python -m pytest tests/ui -q`.
