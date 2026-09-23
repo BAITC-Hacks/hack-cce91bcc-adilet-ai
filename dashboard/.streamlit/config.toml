@@ -1,29 +1,29 @@
 [theme]
 base = "light"
-primaryColor = "#247A38"
-backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F2F7EF"
-textColor = "#182A1C"
-borderColor = "#DAE5D6"
+primaryColor = "#159C89"
+backgroundColor = "#F4F7FB"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#112D44"
+borderColor = "#E0E8EF"
 greenColor = "#247A38"
 greenBackgroundColor = "#E8F5DD"
 greenTextColor = "#225B27"
-linkColor = "#247A38"
+linkColor = "#167D80"
 baseRadius = "14px"
-buttonRadius = "full"
+buttonRadius = "10px"
 showWidgetBorder = true
 showSidebarBorder = false
 font = "sans-serif"
 headingFontSizes = ["42px", "30px", "22px", "18px", "16px", "14px"]
 headingFontWeights = [700, 600, 600, 600, 600, 600]
-dataframeHeaderBackgroundColor = "#EAF2E5"
-chartCategoricalColors = ["#247A38", "#83BA3B", "#2B8F86", "#CCA34B", "#617C55", "#9EADB3"]
+dataframeHeaderBackgroundColor = "#F7F9FB"
+chartCategoricalColors = ["#19AC99", "#365D78", "#D5A14A", "#648EAB", "#76C5B6", "#9EADBD"]
 
 [theme.sidebar]
-backgroundColor = "#F2F7EF"
-secondaryBackgroundColor = "#E5EEDC"
-textColor = "#182A1C"
-primaryColor = "#247A38"
+backgroundColor = "#112D44"
+secondaryBackgroundColor = "#20465E"
+textColor = "#D4E2EF"
+primaryColor = "#31C4AC"
 
 [server]
 address = "localhost"
