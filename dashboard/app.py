@@ -14,6 +14,7 @@ from dashboard.provenance import read_report
 from dashboard.storage import Store
 from dashboard.auth import require_identity, account_controls
 from dashboard.data import ROOT, resolve_path
+from dashboard.ai.ui import investigation_panel
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data', default='./data')
@@ -146,6 +147,7 @@ elif section == 'Узел и переводы':
     st.dataframe(selected, hide_index=True, width='stretch')
     with st.expander('Все наблюдаемые переводы выбранного узла, без фильтра графа'):
         st.dataframe(edges[edges.src.eq(gid) | edges.dst.eq(gid)], hide_index=True, width='stretch')
+    investigation_panel(gid, files, store, user_id, dataset_id)
 elif section == 'Кластеры':
     cluster_id = st.selectbox('Кластер', clusters.cluster_id.tolist(), format_func=lambda value: f'Кластер {value} · {int(clusters.loc[clusters.cluster_id.eq(value), "n_nodes"].iloc[0])} узлов')
     row = clusters[clusters.cluster_id.eq(cluster_id)].iloc[0]
