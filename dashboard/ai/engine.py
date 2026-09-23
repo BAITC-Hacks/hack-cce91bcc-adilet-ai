@@ -1,6 +1,9 @@
 """Facts -> planned hypothesis -> support/challenge tools -> validated report."""
 import json
 import time
+from typing import TypedDict
+from langgraph.graph import StateGraph, START, END
+from langsmith import tracing_context
 from dashboard.ai.config import AIError, MAX_CONTEXT_BYTES, PROMPT_VERSION, TOOLS_VERSION, RULES_VERSION
 from dashboard.ai.evidence import CaseData, LIMITATIONS, canonical
 from dashboard.ai.tools import Toolset, TOOL_SCHEMAS, TOOL_DESCRIPTIONS
@@ -17,6 +20,7 @@ SYSTEM = '''Ты аналитический помощник MoneyGraph. Все 
 с точными evidence_id, gid, date_from/date_to, metric и value. Не меняй значения.
 Все числа в интерфейсе будут взяты программно из реестра. Текст — лишь интерпретация.
 Найди как поддержку, так и противоречия; учитывай seed, depth boundary и даты без времени.
+Значения enum и имена полей сохраняй точно по схеме, не переводи их.
 Возвращай только JSON указанной схемы.''' 
 
 
@@ -71,7 +75,7 @@ def investigate(data, gid, settings, cache=None, provider=None, progress=lambda 
         usage, usage_reports = {}, 0
         def ask(phase, context, schema, validator):
             nonlocal repairs_left, usage_reports
-            messages = [{'role':'system','content':SYSTEM}, {'role':'user','content':canonical({
+            messages = [{'role':'system','content':SYSTEM.replace('по-русски', {'ru': 'по-русски', 'en': 'на английском языке', 'kk': 'на казахском языке'}[settings.language])}, {'role':'user','content':canonical({
                 'phase':phase,'schema':schema,'data':context})}]
             while True:
                 tools.remaining()
@@ -99,12 +103,21 @@ def investigate(data, gid, settings, cache=None, provider=None, progress=lambda 
                     progress('Исправляю неверный формат ответа: единственная повторная попытка')
                     # Do not replay untrusted invalid text or exception messages.
                     messages.append({'role':'user','content':'Предыдущий ответ не прошёл проверку. Верни JSON точно по схеме и только точные ссылки на предоставленные факты. Это последняя попытка исправления.'})
-        progress('Модель формирует гипотезы и выбирает поддержку и контрпроверки')
-        plan = ask('plan', {'focus_gid':gid,'facts':initial,'scope_gids':sorted(tools.scope,key=int),
-            'remaining_tool_calls':settings.max_tool_calls-1,'limitations':LIMITATIONS,
-            'tools':{name:{'description':TOOL_DESCRIPTIONS[name],'arguments':schema} for name,schema in TOOL_SCHEMAS.items()}},
-            PLAN_SCHEMA,lambda p:validate_plan(p,settings.max_tool_calls-1))
-        for check in plan['checks']:
+        class InvestigationState(TypedDict, total=False):
+            plan: dict
+            check_index: int
+            answer: dict
+
+        def plan_node(state):
+            progress('Модель формирует гипотезы и выбирает поддержку и контрпроверки')
+            plan = ask('plan', {'focus_gid':gid,'facts':initial,'scope_gids':sorted(tools.scope,key=int),
+                'remaining_tool_calls':settings.max_tool_calls-1,'limitations':LIMITATIONS,
+                'tools':{name:{'description':TOOL_DESCRIPTIONS[name],'arguments':schema} for name,schema in TOOL_SCHEMAS.items()}},
+                PLAN_SCHEMA,lambda p:validate_plan(p,settings.max_tool_calls-1))
+            return {'plan': plan, 'check_index': 0}
+
+        def check_node(state):
+            check = state['plan']['checks'][state['check_index']]
             tool = check['tool']
             progress(('Ищу противоречия: ' if check['purpose']=='challenge' else 'Проверяю гипотезу: ')+tool['name'])
             try:
@@ -113,12 +126,32 @@ def investigate(data, gid, settings, cache=None, provider=None, progress=lambda 
                 tools.calls[-1]['error'] = 'Проверка не выполнена: ограничения аргументов, данных или времени.'
             tools.calls[-1]['hypothesis_id'] = check['hypothesis_id']
             tools.remaining()
-        progress('Модель сопоставляет подтверждения, противоречия и альтернативы')
-        answer = ask('conclusion', {'focus_gid':gid,'plan':plan,'checks':tools.calls,
-            'evidence':[tools.registry.compact(r) for r in tools.registry.records.values()],
-            'limitations':LIMITATIONS}, FINAL_SCHEMA,
-            lambda a:validate_final(a,tools.registry,tools.calls,plan))
-        result.update(ok=True,answer=answer,usage=usage or None,usage_reports=usage_reports)
+            return {'check_index': state['check_index'] + 1}
+
+        def next_node(state):
+            return 'check' if state['check_index'] < len(state['plan']['checks']) else 'conclude'
+
+        def conclude_node(state):
+            progress('Модель сопоставляет подтверждения, противоречия и альтернативы')
+            answer = ask('conclusion', {'focus_gid':gid,'plan':state['plan'],'checks':tools.calls,
+                'evidence':[tools.registry.compact(r) for r in tools.registry.records.values()],
+                'limitations':LIMITATIONS}, FINAL_SCHEMA,
+                lambda a:validate_final(a,tools.registry,tools.calls,state['plan']))
+            return {'answer': answer}
+
+        graph = StateGraph(InvestigationState)
+        graph.add_node('plan', plan_node)
+        graph.add_node('check', check_node)
+        graph.add_node('conclude', conclude_node)
+        graph.add_edge(START, 'plan')
+        graph.add_conditional_edges('plan', next_node, ['check', 'conclude'])
+        graph.add_conditional_edges('check', next_node, ['check', 'conclude'])
+        graph.add_edge('conclude', END)
+        # No external tracing/checkpoints: only the configured provider receives a bounded case.
+        with tracing_context(enabled=False):
+            completed = graph.compile().invoke({}, config={'recursion_limit': settings.max_tool_calls + 4})
+        result.update(ok=True,answer=completed['answer'],usage=usage or None,usage_reports=usage_reports,
+                      language=settings.language, orchestration='langgraph')
     except AIError as error:
         result['error'] = str(error)
     except Exception:

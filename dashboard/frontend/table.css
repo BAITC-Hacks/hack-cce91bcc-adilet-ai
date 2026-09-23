@@ -41,3 +41,5 @@ footer { display: flex; justify-content: space-between; align-items: center; pad
 .disclaimer { font-size: 12px; margin: 14px 3px 0; }
 @media(max-width: 640px) { .panel-head { padding: 20px; } .tools, .search { width: 100%; } input { flex: 1; } select { max-width: none; width: 100%; } footer { padding: 14px; } }
 @media(prefers-reduced-motion: no-preference) { tbody tr { transition: background .15s; } }
+
+.ai { display: block; margin-top: 6px; font-size: 11px; white-space: nowrap; }

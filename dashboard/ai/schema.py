@@ -37,7 +37,7 @@ def prose(value):
     # Numbers belong only in checked references; inference is displayed separately.
     if re.search(r'\d|https?://|<[^>]+>', value):
         raise AIError('Числа, ссылки и разметка недопустимы в интерпретации: используйте доказательства.')
-    if re.search(r'преступник|доказан\w* мошеннич|доказан\w* правонаруш|виновен|criminal|proven fraud', value, re.I):
+    if re.search(r'преступник|доказан\w* мошеннич|доказан\w* правонаруш|виновен|criminal|proven fraud|fraud is proven|guilty|қылмыскер|кінәлі|алаяқтық дәлелден', value, re.I):
         raise AIError('Вывод содержит недопустимое утверждение о правонарушении.')
 
 

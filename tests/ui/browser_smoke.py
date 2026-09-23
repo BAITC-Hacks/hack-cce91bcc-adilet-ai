@@ -5,6 +5,7 @@ Run: python tests/ui/browser_smoke.py --url http://127.0.0.1:8510 --out /tmp/mon
 Requires playwright and its Chromium browser (development tools only).
 """
 import argparse
+import re
 from pathlib import Path
 from uuid import uuid4
 from playwright.sync_api import sync_playwright, expect
@@ -29,6 +30,18 @@ def main():
         page.locator('[data-testid=stImage] img').wait_for()
         page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
         page.screenshot(path=output / 'welcome-desktop.png', full_page=True)
+        language = page.locator('.st-key-language').get_by_role('combobox')
+        language.click()
+        page.get_by_role('option', name='EN · English', exact=True).click()
+        expect(page.get_by_role('button', name='Create account', exact=True)).to_be_visible()
+        expect(page.get_by_text('Transparent analytics. Clear tools.', exact=True)).to_be_visible()
+        page.reload()
+        expect(page.get_by_role('button', name='Create account', exact=True)).to_be_visible(timeout=30000)
+        language.click()
+        page.get_by_role('option', name='KZ · Қазақша', exact=True).click()
+        expect(page.get_by_role('button', name='Аккаунт жасау', exact=True)).to_be_visible()
+        language.click()
+        page.get_by_role('option', name='RU · Русский', exact=True).click()
         page.get_by_role('button', name='Создать аккаунт', exact=True).click()
         expect(page.get_by_role('textbox', name='Имя', exact=True)).to_be_visible()
         email = f'qa-{uuid4().hex[:12]}@example.test'
@@ -59,6 +72,30 @@ def main():
         expect(page.locator('[data-testid=stApp]')).to_have_attribute('data-test-script-state', 'notRunning', timeout=30000)
         expect(page.locator('[data-testid=stMetricValue]').first).to_contain_text('2 248')
         page.screenshot(path=output / 'overview-desktop.png', full_page=True)
+        expect(page.get_by_role('button', name='Проверить через AI', exact=False).first).to_be_visible()
+        language.click()
+        page.get_by_role('option', name='EN · English', exact=True).click()
+        expect(page.get_by_role('heading', name='Transaction monitoring', exact=True)).to_be_visible()
+        expect(page.get_by_role('heading', name='Priority participants', exact=True)).to_be_visible()
+        expect(page.get_by_role('searchbox', name='Search by participant ID')).to_be_visible()
+        page.get_by_role('button', name='Review with AI', exact=False).first.click()
+        expect(page.get_by_role('button', name='Investigate with AI', exact=True)).to_be_disabled()
+        expect(page.get_by_role('combobox', name='Choose a participant', exact=True)).to_be_visible()
+        page.get_by_text('Chain queue', exact=True).click()
+        expect(page.get_by_role('button', name='Investigate next chain', exact=True)).to_be_disabled()
+        page.screenshot(path=output / 'investigator-en.png', full_page=True)
+        language.click()
+        page.get_by_role('option', name='KZ · Қазақша', exact=True).click()
+        expect(page.get_by_role('button', name='Келесі тізбекті зерттеу', exact=True)).to_be_disabled()
+        page.screenshot(path=output / 'investigator-kk.png', full_page=True)
+        language.click()
+        page.get_by_role('option', name='RU · Русский', exact=True).click()
+        page.locator('.st-key-section [data-testid=stRadioOption]').filter(has_text=re.compile('Обзор$')).click()
+        expect(page.get_by_role('heading', name='Приоритетные узлы', exact=True)).to_be_visible()
+        expect(page.locator('[data-testid=stApp]')).to_have_attribute('data-test-script-state', 'notRunning', timeout=30000)
+        page.locator('.st-key-profile_menu [data-testid=stPopoverButton]:visible').click()
+        expect(page.get_by_text(email, exact=True)).to_be_visible()
+        page.keyboard.press('Escape')
         page.get_by_role('button', name='arrow_forward Исследовать узел', exact=True).click()
         expect(page.get_by_role('textbox', name='Поиск по полному gid')).to_be_visible(timeout=30000)
         page.get_by_role('textbox', name='Заметка аналитика').fill('Проверить источники поступлений. Тест интерфейса.')
@@ -72,6 +109,8 @@ def main():
         expect(page.get_by_text('gid не найден.', exact=False)).to_be_visible()
         page.get_by_role('button', name='Открыть первого в списке приоритета').click()
         expect(page.get_by_role('textbox', name='Заметка аналитика')).to_have_value('Проверить источники поступлений. Тест интерфейса.')
+        expect(page.locator('[data-testid=stApp]')).to_have_attribute('data-test-script-state', 'notRunning', timeout=30000)
+        page.locator('.st-key-profile_menu [data-testid=stPopoverButton]:visible').click()
         page.get_by_role('button', name='logout Выйти', exact=True).click()
         expect(page.get_by_role('textbox', name='Email', exact=True)).to_be_visible()
         page.reload()
@@ -97,10 +136,13 @@ def main():
         mobile.locator('[data-testid=stMain]').evaluate('(el) => el.scrollTo(0, 0)')
         expect(mobile.locator('[data-testid=stMetricValue]').first).to_contain_text('2 248')
         mobile.screenshot(path=output / 'overview-mobile.png', full_page=True)
+        mobile.locator('.st-key-profile_menu [data-testid=stPopoverButton]:visible').click()
+        expect(mobile.get_by_text(email, exact=True)).to_be_visible()
+        mobile.screenshot(path=output / 'profile-mobile.png', full_page=True)
         assert mobile.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1')
         assert not errors, errors
         browser.close()
-        print('PASS: registration validation, login, remember/reload, save, invalid gid, logout, desktop and mobile; screenshots:', output)
+        print('PASS: RU/EN/KZ, language reload, AI row navigation and manual queue, profile menu, registration validation, login, remember/reload, save, invalid gid, logout, desktop and mobile; screenshots:', output)
 
 
 if __name__ == '__main__':

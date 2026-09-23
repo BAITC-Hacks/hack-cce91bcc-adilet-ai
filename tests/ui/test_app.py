@@ -54,16 +54,16 @@ def test_real_app_navigation(monkeypatch, tmp_path):
     assert not app.exception
     assert any('Проверить наблюдаемые источники' in text.value for text in app.text)
     app.sidebar.radio[0].set_value('Узел и переводы').run()
-    app.text_input[0].set_value('unknown').run()
+    app.text_input(key='node_gid').set_value('unknown').run()
     assert not app.exception and any('не найден' in warning.value for warning in app.warning)
     nodes, clusters, _, _ = load_bundle('data', 'out')
     for row in [nodes[nodes.is_seed & nodes.in_deg.eq(0) & nodes.out_deg.eq(0)].iloc[0], nodes[nodes.depth.eq(4) & nodes.out_deg.eq(0)].iloc[0]]:
-        app.text_input[0].set_value(row.gid).run()
+        app.text_input(key='node_gid').set_value(row.gid).run()
         assert not app.exception and app.warning
     app.sidebar.radio[0].set_value('Кластеры').run()
     for size in [clusters.n_nodes.min(), clusters.n_nodes.max()]:
         gid = clusters.loc[clusters.n_nodes.eq(size), 'cluster_id'].iloc[0]
-        app.selectbox[0].set_value(gid).run()
+        app.selectbox(key='cluster_id').set_value(gid).run()
         assert not app.exception and app.metric[0].value == str(int(size))
     app.sidebar.radio[0].set_value('Проверяемость').run()
     assert not app.exception

@@ -4,7 +4,7 @@ import json
 import os
 from urllib.parse import urlsplit
 
-PROMPT_VERSION = 'investigator-v1'
+PROMPT_VERSION = 'investigator-langgraph-v2'
 TOOLS_VERSION = 'bounded-tools-v1'
 RULES_VERSION = 'evidence-validation-v1'
 MAX_CONTEXT_BYTES = 96000
@@ -25,6 +25,7 @@ class Settings:
     max_tool_calls: int = 8
     max_output_tokens: int = 3000
     enabled: bool = False
+    language: str = 'ru'
 
     @classmethod
     def from_env(cls):
@@ -40,6 +41,8 @@ class Settings:
             raise AIError('Проверьте числовые настройки AI_TIMEOUT_SECONDS, AI_MAX_TOOL_CALLS и AI_MAX_OUTPUT_TOKENS.') from None
 
     def validate(self):
+        if self.language not in ('ru', 'en', 'kk'):
+            raise AIError('Unsupported language.')
         if not self.enabled:
             raise AIError('AI выключен. Для подключения задайте AI_ENABLED=true.')
         if not self.api_key:

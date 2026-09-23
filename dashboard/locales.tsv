@@ -1,0 +1,394 @@
+Рабочее пространство	Workspace	Жұмыс кеңістігі
+Аккаунт	Account	Аккаунт
+Обзор	Overview	Шолу
+Узел и переводы	Participant and transfers	Қатысушы және аударымдар
+Кластеры	Clusters	Кластерлер
+Мои проверки	My reviews	Менің тексерулерім
+Проверяемость	Verification	Тексеру
+AI-расследователь	AI investigator	AI зерттеуші
+:material/grid_view: Обзор	:material/grid_view: Overview	:material/grid_view: Шолу
+:material/tune: Узел и переводы	:material/tune: Participant and transfers	:material/tune: Қатысушы және аударымдар
+:material/hub: Кластеры	:material/hub: Clusters	:material/hub: Кластерлер
+:material/task_alt: Мои проверки	:material/task_alt: My reviews	:material/task_alt: Менің тексерулерім
+:material/description: Проверяемость	:material/description: Verification	:material/description: Тексеру
+:material/travel_explore: AI-расследователь	:material/travel_explore: AI investigator	:material/travel_explore: AI зерттеуші
+Мониторинг транзакций	Transaction monitoring	Транзакцияларды бақылау
+Кластеры связей	Connection clusters	Байланыс кластерлері
+Проверяемость расчёта	Calculation verification	Есептеуді тексеру
+Выберите, с кого начать: приоритет, связи и наблюдаемые суммы в одном месте.	Choose where to start: review priorities, connections and observed amounts in one place.	Кімнен бастау керегін таңдаңыз: басымдықтар, байланыстар және бақыланған сомалар бір жерде.
+Проследите переводы, проверьте ограничения и сохраните свой вывод.	Follow transfers, check data limitations and save your findings.	Аударымдарды қадағалап, деректер шектеулерін тексеріп, қорытындыңызды сақтаңыз.
+Исследуйте группы связанных участников и откройте нужного участника.	Explore connected groups and open a participant.	Байланысқан топтарды зерттеп, қажетті қатысушыны ашыңыз.
+Продолжите начатую работу: здесь ваши заметки, статусы и записки.	Continue your work with saved notes, statuses and reports.	Сақталған жазбалар, мәртебелер және есептер арқылы жұмысты жалғастырыңыз.
+Проверьте источник данных, результаты расчёта и скачайте выгрузки.	Check the data source and calculated results, and download exports.	Дереккөзді, есептеу нәтижелерін тексеріп, файлдарды жүктеп алыңыз.
+Проверяйте цепочки по очереди или выберите любого участника.	Review chains in order or choose any participant.	Тізбектерді кезекпен тексеріңіз немесе кез келген қатысушыны таңдаңыз.
+Источник данных	Data source	Дереккөз
+Источник аналитики	Analytics source	Талдау дереккөзі
+Файлы CSV / Parquet	CSV / Parquet files	CSV / Parquet файлдары
+Каталог CSV	CSV directory	CSV бумасы
+Каталог parquet	Parquet directory	Parquet бумасы
+Для файлов: пути относительно корня проекта. MariaDB: снимки из настроенного сервера.	File paths are relative to the project root. MariaDB snapshots come from the configured server.	Файл жолдары жоба түбірінен беріледі. MariaDB көшірмелері бапталған серверден алынады.
+Снимок MariaDB	MariaDB snapshot	MariaDB көшірмесі
+Версия аналитики	Analytics version	Талдау нұсқасы
+Обновить данные	Refresh data	Деректерді жаңарту
+Прототип команды · не официальный сервис банка	Team prototype · not an official bank service	Команда прототипі · банктің ресми қызметі емес
+MariaDB · аккаунты и заметки	MariaDB · accounts and notes	MariaDB · аккаунттар мен жазбалар
+Локальное пространство	Local workspace	Жергілікті жұмыс кеңістігі
+▦ &nbsp; Июль 2026	▦ July 2026	▦ 2026 жылғы шілде
+Период выборки	Sample period	Іріктеме кезеңі
+Участники	Participants	Қатысушылар
+Связи	Connections	Байланыстар
+Переводы	Transfers	Аударымдар
+Группы	Groups	Топтар
+Участники наблюдаемого графа	Participants in the observed graph	Бақыланған граф қатысушылары
+Связи между участниками	Connections between participants	Қатысушылар арасындағы байланыстар
+В исходной выборке	In the source sample	Бастапқы іріктемеде
+Группы связанных узлов	Groups of connected nodes	Байланысқан түйіндер топтары
+Данные ещё не загружены	Data not loaded yet	Деректер әлі жүктелген жоқ
+Наблюдаемый оборот: {v0} KZT · исходных участников: {v1} · изолированных: {v2}	Observed turnover: {v0} KZT · seeds: {v1} · isolated seeds: {v2}	Бақыланған айналым: {v0} KZT · бастапқы қатысушылар: {v1} · оқшауланғандар: {v2}
+Выберите участника	Choose a participant	Қатысушыны таңдаңыз
+Начните с верхних строк списка.	Start with the top rows of the list.	Тізімнің жоғарғы жолдарынан бастаңыз.
+Исследуйте связи	Explore connections	Байланыстарды зерттеңіз
+Сопоставьте роль, суммы и ограничения.	Compare the role, amounts and limitations.	Рөлді, сомаларды және шектеулерді салыстырыңыз.
+Сохраните проверку	Save your review	Тексеруді сақтаңыз
+Добавьте заметку и следующий шаг.	Add a note and a next step.	Жазба мен келесі қадамды қосыңыз.
+Быстрый переход к узлу	Quick access to a participant	Қатысушыға жылдам өту
+С чего начать проверку	Where to start	Тексеруді неден бастау керек
+Откройте приоритетный узел, изучите входящие связи и сохраните выводы в проверку.	Open a priority participant, examine incoming connections and save your findings.	Басымдығы жоғары қатысушыны ашып, кіріс байланыстарын зерттеп, қорытындыны сақтаңыз.
+Приоритетный узел	Priority participant	Басымдығы жоғары қатысушы
+Исследовать узел	Explore participant	Қатысушыны зерттеу
+Исследовать участника	Explore participant	Қатысушыны зерттеу
+Исходная таблица и экспорт CSV	Source table and CSV export	Бастапқы кесте және CSV экспорты
+Полный список приоритетных узлов, без фильтров JavaScript-таблицы.	Full priority list, without the interactive table filters.	Интерактивті кесте сүзгілерінсіз толық басымдық тізімі.
+Скачать полный список CSV	Download full CSV list	Толық CSV тізімін жүктеу
+Роли в наблюдаемом графе	Roles in the observed graph	Бақыланған графтағы рөлдер
+Глубина наблюдения	Observation depth	Бақылау тереңдігі
+Узлы	Nodes	Түйіндер
+Ограничения выборки	Sample limitations	Іріктеме шектеулері
+Граф построен по исходящим переводам от 81 исходного участника (seed), до четырёх шагов. Входящие переводы исходных участников неполны; исходящие за границей глубины неизвестны. Все суммы относятся только к наблюдаемой выборке. В транзакциях есть дата, но нет времени суток: совпадение дня не доказывает порядок и путь конкретных денег.	The graph follows outgoing transfers from 81 seeds up to four steps. Incoming seed transfers are incomplete; outgoing transfers beyond the depth boundary are unknown. All amounts refer only to the observed sample. Transactions have dates but no times: the same day does not prove a sequence or the path of specific funds.	Граф 81 бастапқы қатысушыдан (seed) шығатын аударымдарды төрт қадамға дейін қамтиды. Олардың кіріс аударымдары толық емес; тереңдік шекарасынан кейінгі шығыс аударымдары белгісіз. Барлық сомалар тек бақыланған іріктемеге қатысты. Транзакцияларда күн бар, бірақ уақыт жоқ: бір күнге сәйкес келу реттілікті немесе нақты ақшаның жолын дәлелдемейді.
+Сборщик средств	Consolidator	Қаражат жинақтаушы
+Транзитный участник	Transit participant	Транзиттік қатысушы
+Распределитель	Distributor	Таратушы
+Конечный получатель	Terminal recipient	Түпкі алушы
+Координатор связей	Connection coordinator	Байланыс үйлестірушісі
+Периферийный участник	Peripheral participant	Шеткі қатысушы
+Собирает наблюдаемые переводы от нескольких участников.	Receives observed transfers from multiple participants.	Бірнеше қатысушыдан бақыланған аударымдарды жинайды.
+Получает и отправляет средства дальше в наблюдаемом графе.	Receives and forwards funds in the observed graph.	Бақыланған графта қаражатты қабылдап, әрі қарай жібереді.
+Отправляет переводы нескольким получателям.	Sends transfers to multiple recipients.	Бірнеше алушыға аударым жібереді.
+Нет наблюдаемого продолжения потока внутри доступной глубины.	No further flow is observed within the available depth.	Қолжетімді тереңдік ішінде ағынның жалғасы бақыланбайды.
+Связывает несколько частей наблюдаемой сети.	Connects several parts of the observed network.	Бақыланған желінің бірнеше бөлігін байланыстырады.
+Недостаточно признаков для более определённой роли.	Insufficient evidence for a more specific role.	Нақтырақ рөлді анықтау үшін белгілер жеткіліксіз.
+ID участника	Participant ID	Қатысушы ID
+gid — идентификатор участника в исходном наборе	gid is the participant identifier in the source dataset	gid — бастапқы деректердегі қатысушы идентификаторы
+Отправитель	Sender	Жіберуші
+Получатель	Recipient	Алушы
+Сумма, ₸	Amount, ₸	Сома, ₸
+Переводов	Transfers	Аударымдар
+Роль · гипотеза	Role · hypothesis	Рөл · болжам
+Приоритет проверки	Review priority	Тексеру басымдығы
+Сила правила	Rule strength	Ереже күші
+Шаг от исходных участников	Steps from seeds	Бастапқы қатысушылардан қадамдар
+Исходный участник	Seed participant	Бастапқы қатысушы
+Наблюдения	Observations	Бақылаулар
+Почему в списке	Why listed	Тізімге ену себебі
+Шагов до участника	Steps to participant	Қатысушыға дейінгі қадамдар
+Путь по направлению переводов	Path along transfer direction	Аударым бағыты бойынша жол
+Место	Rank	Орын
+Поиск по полному gid	Search by full gid	Толық gid бойынша іздеу
+Скопируйте ID участника из таблицы. gid — его идентификатор в исходной выборке.	Copy a participant ID from the table. gid identifies them in the source sample.	Кестеден қатысушы ID көшіріңіз. gid — оның бастапқы іріктемедегі идентификаторы.
+Введите ID участника	Enter participant ID	Қатысушы ID енгізіңіз
+Насколько выражены признаки выбранной роли по нашему правилу. Не вероятность.	Strength of the role indicators under our rule. Not a probability.	Біздің ереже бойынша рөл белгілерінің айқындылығы. Ықтималдық емес.
+Очередность ручной проверки от 0 до 1. Не вероятность нарушения.	Manual review priority from 0 to 1. Not a probability of wrongdoing.	0 мен 1 арасындағы қолмен тексеру басымдығы. Құқық бұзушылық ықтималдығы емес.
+Получил **{v0} ₸** от **{v1}** участников. Отправил **{v2} ₸** **{v3}** получателям.	Received **{v0} ₸** from **{v1}** participants. Sent **{v2} ₸** to **{v3}** recipients.	**{v1}** қатысушыдан **{v0} ₸** алды. **{v3}** алушыға **{v2} ₸** жіберді.
+Суммы и связи относятся только к наблюдаемой выборке.	Amounts and connections refer only to the observed sample.	Сомалар мен байланыстар тек бақыланған іріктемеге қатысты.
+Исходное объяснение из расчёта	Original calculation explanation	Есептеудің бастапқы түсіндірмесі
+Почему такой приоритет: вклад каждого признака	Why this priority: each feature's contribution	Бұл басымдықтың себебі: әр белгінің үлесі
+Вклады суммируются в priority_score. Это объяснение правила, а не причинности или вероятности.	Contributions sum to priority_score. This explains the rule, not causality or probability.	Үлестер қосындысы priority_score береді. Бұл себептіліктің не ықтималдықтың емес, ереженің түсіндірмесі.
+Кто выше по наблюдаемой цепочке	Who is upstream in the observed chain	Бақыланған тізбекте кім жоғары тұр
+Обратный поиск до 4 шагов: кто может достичь выбранного узла по направлению переводов. В таблице один кратчайший путь на кандидата, до 20 кандидатов по приоритету.	Reverse search up to 4 steps: who can reach this participant along transfer directions. One shortest path per candidate; up to 20 candidates ordered by priority.	4 қадамға дейін кері іздеу: аударым бағыты бойынша осы қатысушыға кім жете алады. Әр үміткерге бір ең қысқа жол; басымдығы бойынша 20 үміткерге дейін.
+Глубина поиска предшественников	Upstream search depth	Алдыңғы қатысушыларды іздеу тереңдігі
+В выбранной глубине предшественников не найдено. Это не исключает внешние источники вне выборки.	No upstream participants found at this depth. Sources outside the sample may still exist.	Осы тереңдікте алдыңғы қатысушылар табылмады. Іріктемеден тыс көздер болуы мүмкін.
+Путь в графе не доказывает движение одной суммы или общее управление участниками.	A graph path does not prove movement of the same funds or shared control of participants.	Графтағы жол бір қаражаттың қозғалысын немесе қатысушылардың ортақ басқарылуын дәлелдемейді.
+Скачать записку для проверки	Download review report	Тексеру есебін жүктеу
+Кластер {v0} · глубина {v1} · вход {v2} KZT от {v3} · выход {v4} KZT к {v5} · pass_through {v6}	Cluster {v0} · depth {v1} · incoming {v2} KZT from {v3} · outgoing {v4} KZT to {v5} · pass_through {v6}	Кластер {v0} · тереңдік {v1} · {v3} қатысушыдан кіріс {v2} KZT · {v5} қатысушыға шығыс {v4} KZT · pass_through {v6}
+Как читать признаки потока	How to read flow indicators	Ағын белгілерін қалай түсінуге болады
+Быстрое сопоставление сумм (fast2): {v0}. Входы и выходы сопоставляются за 0–2 календарных дня.	Fast amount matching (fast2): {v0}. Incoming and outgoing amounts are matched over 0–2 calendar days.	Сомаларды жылдам сәйкестендіру (fast2): {v0}. Кіріс пен шығыс 0–2 күнтізбелік күн ішінде салыстырылады.
+В данных есть только даты. Порядок переводов внутри дня и путь конкретных денег не доказаны. Для исходных участников входы неполны.	The data contains dates only. Intraday order and the path of specific funds are unproven. Incoming seed transfers are incomplete.	Деректерде тек күндер бар. Күн ішіндегі аударым реті мен нақты ақшаның жолы дәлелденбеген. Бастапқы қатысушылардың кірістері толық емес.
+Направленные переводы · один шаг	Directed transfers · one step	Бағытталған аударымдар · бір қадам
+Лимит соседей	Neighbor limit	Көршілер шегі
+Минимум на пару, KZT	Minimum per pair, KZT	Жұпқа ең аз сома, KZT
+Направление	Direction	Бағыт
+Оба	Both	Екеуі де
+Входящие	Incoming	Кіріс
+Исходящие	Outgoing	Шығыс
+Показано {v0} из {v1} соседей после фильтра; {v2} направленных пар. Соседи отобраны по сумме переводов. Стрелка ведёт от плательщика к получателю; сумма — при наведении на середину ребра и в таблице.	Showing {v0} of {v1} filtered neighbors; {v2} directed pairs. Neighbors are ranked by transfer amount. Arrows point from sender to recipient; hover over an edge midpoint or use the table to see amounts.	Сүзгіден кейін {v1} көршінің {v0} көрсетілді; {v2} бағытталған жұп. Көршілер аударым сомасы бойынша таңдалды. Көрсеткі жіберушіден алушыға бағытталған; сома қабырға ортасына меңзерді апарғанда және кестеде көрінеді.
+Нет наблюдаемых переводов для выбранных фильтров.	No observed transfers match the selected filters.	Таңдалған сүзгілерге сәйкес бақыланған аударымдар жоқ.
+Крупный узел — выбранный участник. Наведите на узел для роли и приоритета; на середину связи — для суммы.	The large node is the selected participant. Hover over nodes for roles and priorities, and edge midpoints for amounts.	Үлкен түйін — таңдалған қатысушы. Рөл мен басымдық үшін түйінге, сома үшін байланыс ортасына меңзерді апарыңыз.
+Все наблюдаемые переводы выбранного узла, без фильтра графа	All observed transfers for this participant, without graph filters	Таңдалған қатысушының барлық бақыланған аударымдары, граф сүзгілерінсіз
+Сохранить проверку	Save review	Тексеруді сақтау
+Статус проверки	Review status	Тексеру мәртебесі
+Заметка аналитика	Analyst note	Талдаушы жазбасы
+Что наблюдаете и что необходимо проверить дальше?	What do you observe, and what needs checking next?	Не байқадыңыз және келесіде нені тексеру керек?
+В работе	In progress	Жұмыста
+Проверено	Reviewed	Тексерілді
+Отложено	Deferred	Кейінге қалдырылды
+Сохранить в мои проверки	Save to my reviews	Менің тексерулеріме сақтау
+Проверка сохранена. Она будет доступна после перезапуска приложения.	Review saved. It will remain available after restarting the app.	Тексеру сақталды. Қолданба қайта іске қосылғаннан кейін де қолжетімді болады.
+Кластер	Cluster	Кластер
+Кластер {id} · {count} узлов	Cluster {id} · {count} nodes	Кластер {id} · {count} түйін
+Исходные участники	Seed participants	Бастапқы қатысушылар
+Внутренний оборот, KZT	Internal turnover, KZT	Ішкі айналым, KZT
+Исходный текст данных и выгрузки сохраняются на языке источника.	Source data text and original exports retain their source language.	Бастапқы дерек мәтіндері мен экспорттар дереккөз тілінде сақталады.
+Кластеры вычислены на ненаправленной проекции с суммой обоих направлений. Принадлежность группе не доказывает общее назначение переводов.	Clusters use an undirected projection with amounts summed across both directions. Group membership does not prove a shared purpose of transfers.	Кластерлер екі бағыт сомалары қосылған бағытталмаған проекцияда есептелген. Топқа кіру аударымдардың ортақ мақсатын дәлелдемейді.
+**Участники для начала проверки:**	**Participants to start with:**	**Тексеруді бастауға арналған қатысушылар:**
+Участник кластера	Cluster participant	Кластер қатысушысы
+Личные заметки, статусы и снимки аналитических записок. Каждая проверка связана с версией данных.	Personal notes, statuses and saved reports. Each review is linked to a data version.	Жеке жазбалар, мәртебелер және сақталған есептер. Әр тексеру деректер нұсқасына байланысты.
+Пока нет сохранённых проверок. Откройте узел и нажмите «Сохранить в мои проверки».	No saved reviews yet. Open a participant and choose “Save to my reviews”.	Сақталған тексерулер әлі жоқ. Қатысушыны ашып, «Менің тексерулеріме сақтау» түймесін басыңыз.
+Показать проверки	Show reviews	Тексерулерді көрсету
+Все статусы	All statuses	Барлық мәртебелер
+Найти в моих проверках	Search my reviews	Менің тексерулерімнен іздеу
+ID участника или текст заметки	Participant ID or note text	Қатысушы ID немесе жазба мәтіні
+Найдено проверок: {v0}	Reviews found: {v0}	Табылған тексерулер: {v0}
+Нет проверок с такими условиями. Измените статус или поисковый запрос.	No matching reviews. Change the status or search query.	Сәйкес тексерулер жоқ. Мәртебені немесе іздеу сұрауын өзгертіңіз.
+Обновлено {v0} UTC · версия {v1}	Updated {v0} UTC · version {v1}	Жаңартылды {v0} UTC · нұсқа {v1}
+Заметка пока не добавлена.	No note added yet.	Жазба әлі қосылған жоқ.
+Скачать сохранённую записку	Download saved report	Сақталған есепті жүктеу
+Открыть и изменить	Open and edit	Ашу және өзгерту
+Архивная версия данных. Сохранённая записка доступна для скачивания.	Archived data version. The saved report is available to download.	Деректердің мұрағаттық нұсқасы. Сақталған есепті жүктеп алуға болады.
+История действий	Activity history	Әрекеттер тарихы
+Паспорт расчёта	Run provenance	Есептеу паспорты
+Источник: {v0} · версия данных: {v1}	Source: {v0} · data version: {v1}	Дереккөз: {v0} · деректер нұсқасы: {v1}
+Снимок прочитан из MariaDB. Структура, строки и контрольные суммы проверены при загрузке.	Snapshot loaded from MariaDB. Structure, rows and checksums were checked during loading.	Көшірме MariaDB-ден жүктелді. Жүктеу кезінде құрылым, жолдар және бақылау сомалары тексерілді.
+Паспорт времени и диагностики локального запуска не входит в снимок MariaDB. Для него выберите соответствующие локальные файлы.	Local run timings and diagnostics are not part of the MariaDB snapshot. Select the matching local files to view them.	Жергілікті іске қосу уақыты мен диагностикасы MariaDB көшірмесіне кірмейді. Оларды көру үшін тиісті жергілікті файлдарды таңдаңыз.
+Связывает показанные CSV с конкретным запуском. Хеши проверяют совпадение файлов, а не достоверность исходных сведений.	Links the displayed CSV files to a specific run. Hashes verify matching files, not the truth of source data.	Көрсетілген CSV файлдарын нақты іске қосумен байланыстырады. Хештер бастапқы мәліметтердің шындығын емес, файлдардың сәйкестігін тексереді.
+Паспорт недоступен или не соответствует CSV: {v0}	Run provenance unavailable or does not match CSV: {v0}	Есептеу паспорты қолжетімсіз немесе CSV-ге сәйкес емес: {v0}
+Хеши трёх CSV совпадают с паспортом запуска.	All three CSV hashes match the run provenance.	Үш CSV хеші іске қосу паспортына сәйкес келеді.
+Версия алгоритма:	Algorithm version:	Алгоритм нұсқасы:
+Совпадение топ-20 с простым рейтингом по максимальному входу/выходу: {v0} из 20.	Top-20 overlap with a simple maximum incoming/outgoing volume ranking: {v0} of 20.	Ең жоғары кіріс/шығыс сомасы бойынша қарапайым рейтингпен топ-20 сәйкестігі: 20-дан {v0}.
+Различие с рейтингом по сумме показывает влияние структуры и временных признаков. Оно не доказывает более высокую точность.	Differences from a volume ranking show the influence of structural and temporal features. They do not prove greater accuracy.	Сома бойынша рейтингтен айырмашылық құрылымдық және уақыттық белгілердің әсерін көрсетеді. Бұл жоғары дәлдікті дәлелдемейді.
+Исключённый компонент	Excluded component	Алып тасталған компонент
+Сохранились в топ-20	Retained in top 20	Топ-20 ішінде қалды
+Чувствительность: исключаем один вклад, остальные веса не меняем. Чем меньше совпадение, тем сильнее рейтинг зависит от компонента.	Sensitivity: remove one contribution without changing other weights. Lower overlap means greater dependence on that component.	Сезімталдық: басқа салмақтарды өзгертпей, бір үлесті алып тастаймыз. Сәйкестік аз болған сайын рейтинг сол компонентке көбірек тәуелді.
+Параметры, версии и контрольные суммы	Parameters, versions and checksums	Параметрлер, нұсқалар және бақылау сомалары
+ГРАФ ДЕНЕГ · HACKALEM AI	MONEY GRAPH · HACKALEM AI	АҚША ГРАФЫ · HACKALEM AI
+ОТ ПЕРЕВОДА К ПОЛНОЙ КАРТИНЕ	FROM A TRANSFER TO THE FULL PICTURE	АУДАРЫМНАН ТОЛЫҚ КӨРІНІСКЕ
+У каждого перевода	Every transfer	Әр аударымның
+есть продолжение.	has a next step.	жалғасы бар.
+Увидьте цепочки движения денег, исследуйте связи	Discover money transfer chains, explore connections	Ақша қозғалысының тізбектерін көріп, байланыстарды зерттеңіз
+и соберите наблюдения в личном пространстве аналитика.	and gather findings in your personal analyst workspace.	және талдаушының жеке кеңістігінде бақылауларды жинақтаңыз.
+01 / ИССЛЕДУЙТЕ	01 / EXPLORE	01 / ЗЕРТТЕҢІЗ
+02 / ПРОВЕРЯЙТЕ	02 / REVIEW	02 / ТЕКСЕРІҢІЗ
+03 / СОХРАНЯЙТЕ	03 / SAVE	03 / САҚТАҢЫЗ
+Связи в одной картине	Connections in one view	Байланыстар бір көріністе
+Направленный граф помогает проследить наблюдаемые переводы.	A directed graph helps you trace observed transfers.	Бағытталған граф бақыланған аударымдарды қадағалауға көмектеседі.
+Числа за каждым выводом	Numbers behind every finding	Әр қорытындының артындағы сандар
+Роли и приоритеты сопровождаются наблюдениями и ограничениями данных.	Roles and priorities come with observations and data limitations.	Рөлдер мен басымдықтар бақылаулар және деректер шектеулерімен бірге беріледі.
+Своё пространство	Your own workspace	Өз кеңістігіңіз
+Личные заметки и проверки доступны после следующего входа.	Your notes and reviews remain available when you sign in again.	Жеке жазбалар мен тексерулер келесі кіргенде қолжетімді болады.
+ПОД КАПОТОМ	BUILT WITH	ТЕХНОЛОГИЯЛАР
+Прозрачная аналитика. Понятные инструменты.	Transparent analytics. Clear tools.	Ашық талдау. Түсінікті құралдар.
+Подготовка данных и расчёт признаков	Data preparation and feature calculation	Деректерді дайындау және белгілерді есептеу
+Граф, центральности и кластеры связей	Graph, centrality metrics and connection clusters	Граф, орталықтық көрсеткіштер және байланыс кластерлері
+Интерактивное рабочее пространство	Interactive workspace	Интерактивті жұмыс кеңістігі
+Общий источник аналитики, аккаунтов и проверок	Shared storage for analytics, accounts and reviews	Талдау, аккаунттар және тексерулерге ортақ қойма
+Freedom Flow · Прототип команды для HackAlem AI	Freedom Flow · Team prototype for HackAlem AI	Freedom Flow · HackAlem AI үшін команда прототипі
+Аналитические роли — гипотезы для проверки, а не доказательство нарушения.	Analytical roles are hypotheses to review, not proof of wrongdoing.	Талдау рөлдері — тексеруге арналған болжамдар, құқық бұзушылық дәлелі емес.
+На главную	Home	Басты бет
+Ваше рабочее пространство	Your workspace	Сіздің жұмыс кеңістігіңіз
+Доступ	Access	Кіру
+Вход	Sign in	Кіру
+Регистрация	Register	Тіркелу
+Восстановление	Recovery	Қалпына келтіру
+Войти	Sign in	Кіру
+Создать аккаунт	Create account	Аккаунт жасау
+Имя	Name	Аты
+Как к вам обращаться	Your name	Сіздің атыңыз
+Пароль	Password	Құпиясөз
+Повторите пароль	Repeat password	Құпиясөзді қайталаңыз
+Новый пароль	New password	Жаңа құпиясөз
+Повторите новый пароль	Repeat new password	Жаңа құпиясөзді қайталаңыз
+Текущий пароль	Current password	Қазіргі құпиясөз
+Запомнить меня на 30 дней	Remember me for 30 days	Мені 30 күн есте сақтау
+Только на личном устройстве. Пароль не сохраняется.	Use on a personal device only. Your password is not stored.	Тек жеке құрылғыда қолданыңыз. Құпиясөз сақталмайды.
+Создайте аккаунт, чтобы сохранять заметки и продолжать проверки с любого устройства.	Create an account to save notes and continue reviews from any device.	Жазбаларды сақтап, кез келген құрылғыдан тексеруді жалғастыру үшін аккаунт жасаңыз.
+От 15 до 128 символов. Подойдёт длинная фраза.	15–128 characters. A long phrase works well.	15–128 таңба. Ұзын сөз тіркесін қолдануға болады.
+Используйте резервный код, полученный при регистрации. После восстановления все прежние сессии будут завершены.	Use the recovery code from registration. Recovery will end all existing sessions.	Тіркелу кезінде алынған қалпына келтіру кодын пайдаланыңыз. Қалпына келтіргеннен кейін барлық бұрынғы сессиялар аяқталады.
+Резервный код	Recovery code	Қалпына келтіру коды
+Восстановить доступ	Recover access	Кіруді қалпына келтіру
+Пароль сохранён. Сохраните резервный код перед входом.	Password saved. Save your recovery code before signing in.	Құпиясөз сақталды. Кірмес бұрын қалпына келтіру кодын сақтаңыз.
+Этот код позволит восстановить доступ без почты. Он показывается только сейчас; храните его отдельно от пароля.	This code restores access without email. It is shown only now; store it separately from your password.	Бұл код электрондық поштасыз кіруді қалпына келтіреді. Ол тек қазір көрсетіледі; құпиясөзден бөлек сақтаңыз.
+Скачать резервный код	Download recovery code	Қалпына келтіру кодын жүктеу
+Я сохранил код — перейти ко входу	I saved the code — sign in	Кодты сақтадым — кіруге өту
+Выйти	Sign out	Шығу
+Безопасность аккаунта	Account security	Аккаунт қауіпсіздігі
+Сменить пароль	Change password	Құпиясөзді өзгерту
+Выйти на всех устройствах	Sign out on all devices	Барлық құрылғыдан шығу
+Сессия завершена. Войдите снова.	Session ended. Please sign in again.	Сессия аяқталды. Қайта кіріңіз.
+Браузер запретил сохранение входа. В этой вкладке вход работает как обычно.	The browser blocked persistent sign-in. This tab still works normally.	Браузер кіруді сақтауға тыйым салды. Бұл қойындыда кіру қалыпты жұмыс істейді.
+Пароли не совпадают.	Passwords do not match.	Құпиясөздер сәйкес келмейді.
+Неверный email или пароль.	Incorrect email or password.	Email немесе құпиясөз қате.
+Неверный email или резервный код.	Incorrect email or recovery code.	Email немесе қалпына келтіру коды қате.
+Текущий пароль неверен.	Current password is incorrect.	Қазіргі құпиясөз қате.
+Введите корректный email.	Enter a valid email address.	Дұрыс email мекенжайын енгізіңіз.
+Имя должно содержать от 1 до 80 символов.	Name must contain 1–80 characters.	Атыңыз 1–80 таңбадан тұруы керек.
+Пароль должен содержать от 15 до 128 символов. Можно использовать длинную фразу.	Password must contain 15–128 characters. You can use a long phrase.	Құпиясөз 15–128 таңбадан тұруы керек. Ұзын сөз тіркесін қолдануға болады.
+Не удалось создать аккаунт с этим email. Попробуйте войти или восстановить доступ.	Could not create an account with this email. Try signing in or recovering access.	Бұл email арқылы аккаунт жасау мүмкін болмады. Кіріп көріңіз немесе кіруді қалпына келтіріңіз.
+Рабочее пространство временно недоступно	Workspace temporarily unavailable	Жұмыс кеңістігі уақытша қолжетімсіз
+Не удалось подключиться к хранилищу аккаунтов. Проверьте доступность MariaDB и настройки подключения.	Could not connect to account storage. Check MariaDB availability and connection settings.	Аккаунттар қоймасына қосылу мүмкін болмады. MariaDB қолжетімділігін және қосылу баптауларын тексеріңіз.
+Повторить подключение	Retry connection	Қайта қосылу
+Существующие аккаунты и заметки сохраняются в выбранном хранилище.	Existing accounts and notes remain in the selected storage.	Бар аккаунттар мен жазбалар таңдалған қоймада сақталады.
+Не удалось выполнить действие с аккаунтом. Проверьте подключение и повторите.	Account action failed. Check the connection and try again.	Аккаунт әрекеті орындалмады. Қосылымды тексеріп, қайталаңыз.
+Подключите данные, чтобы начать проверку. Укажите источник в боковой панели «Источник данных».	Connect data to start a review. Select the source in the sidebar's “Data source” panel.	Тексеруді бастау үшін деректерді қосыңыз. Бүйірлік панельдегі «Дереккөз» бөлімінде көзді таңдаңыз.
+Подробности загрузки и команда расчёта	Load details and calculation command	Жүктеу мәліметтері және есептеу пәрмені
+Не удалось загрузить или сохранить набор. Проверьте файлы и подключение к хранилищу.	Could not load or save the dataset. Check files and the storage connection.	Деректерді жүктеу немесе сақтау мүмкін болмады. Файлдарды және қойма қосылымын тексеріңіз.
+Повторить загрузку	Retry loading	Қайта жүктеу
+В MariaDB пока нет опубликованных аналитических снимков.	No analytics snapshots have been published to MariaDB yet.	MariaDB-де жарияланған талдау көшірмелері әлі жоқ.
+Загружаем и проверяем снимок MariaDB…	Loading and checking the MariaDB snapshot…	MariaDB көшірмесі жүктеліп, тексерілуде…
+gid не найден. Введите полный целочисленный идентификатор из таблицы.	gid not found. Enter the complete integer identifier from the table.	gid табылмады. Кестедегі толық бүтін санды идентификаторды енгізіңіз.
+Открыть первого в списке приоритета	Open first priority participant	Басымдық тізіміндегі бірінші қатысушыны ашу
+История просмотра временно недоступна. Аналитику можно продолжить.	View history is temporarily unavailable. You can continue the analysis.	Қарау тарихы уақытша қолжетімсіз. Талдауды жалғастыруға болады.
+Не удалось прочитать сохранённую заметку. Повторите загрузку перед редактированием.	Could not read the saved note. Reload before editing.	Сақталған жазбаны оқу мүмкін болмады. Өңдемес бұрын қайта жүктеңіз.
+Не удалось сохранить проверку. Текст остаётся в форме — повторите попытку.	Could not save the review. Your text remains in the form — try again.	Тексеруді сақтау мүмкін болмады. Мәтін формада қалды — қайталап көріңіз.
+Не удалось загрузить проверки. Повторите после восстановления подключения.	Could not load reviews. Retry when the connection is restored.	Тексерулерді жүктеу мүмкін болмады. Қосылым қалпына келгенде қайталаңыз.
+История временно недоступна.	History is temporarily unavailable.	Тарих уақытша қолжетімсіз.
+Seed: входящие переводы неполны; баланс и pass_through не описывают полный поток.	Seed: incoming transfers are incomplete; balance and pass_through do not describe the full flow.	Seed: кіріс аударымдары толық емес; баланс пен pass_through толық ағынды сипаттамайды.
+Граница depth=4: дальнейшие переводы неизвестны. Это не доказательство конечного получателя.	Depth=4 boundary: further transfers are unknown. This is not proof of a terminal recipient.	depth=4 шекарасы: әрі қарайғы аударымдар белгісіз. Бұл түпкі алушының дәлелі емес.
+Нет наблюдаемого входа: pass_through=0 — техническое значение, а не отсутствие транзита.	No observed incoming flow: pass_through=0 is a technical value, not evidence of no transit.	Бақыланған кіріс жоқ: pass_through=0 — техникалық мән, транзиттің жоқтығы емес.
+Проверить через AI	Review with AI	AI арқылы тексеру
+AI-расследование	Investigate with AI	AI арқылы зерттеу
+Расследовать следующую цепочку	Investigate next chain	Келесі тізбекті зерттеу
+Расследование запускается только по кнопке. Агент проверяет ограниченное окружение участника и ищет подтверждения и противоречия.	Investigations start only on a button click. The agent checks a bounded participant neighborhood for supporting and contradicting evidence.	Зерттеу тек түймені басқанда іске қосылады. Агент қатысушының шектеулі айналасын тексеріп, растайтын және қайшы деректерді іздейді.
+Режим расследования	Investigation mode	Зерттеу режимі
+Очередь цепочек	Chain queue	Тізбектер кезегі
+Выбрать участника	Choose a participant	Қатысушыны таңдау
+Проверено в этой сессии: {count} из {total}	Reviewed this session: {count} of {total}	Осы сессияда тексерілді: {total} ішінен {count}
+Следующая цепочка: окружение участника {gid}	Next chain: participant {gid} and their neighborhood	Келесі тізбек: {gid} қатысушысы және оның айналасы
+Очередь завершена. Можно выбрать участника для повторной проверки.	Queue complete. Select a participant to review again.	Кезек аяқталды. Қайта тексеру үшін қатысушыны таңдауға болады.
+По кнопке профиль и ограниченное окружение клиента передаются во внешний API. Весь датасет, пароли, заметки и данные вашего аккаунта не передаются.	On click, the participant profile and a bounded neighborhood are sent to the external API. The full dataset, passwords, notes and your account data are not sent.	Түйме басылғанда қатысушы профилі мен шектеулі айналасы сыртқы API-ға жіберіледі. Толық деректер, құпиясөздер, жазбалар және аккаунт мәліметтері жіберілмейді.
+Разрешаю отправить фрагмент этого кейса во внешний AI API	I allow this case fragment to be sent to the external AI API	Осы істің үзіндісін сыртқы AI API-ға жіберуге рұқсат беремін
+Провайдер: {v0} · модель: {v1}	Provider: {v0} · model: {v1}	Провайдер: {v0} · модель: {v1}
+Готовлю расследование	Preparing investigation	Зерттеу дайындалуда
+Расследование завершено	Investigation complete	Зерттеу аяқталды
+Доступны факты; AI-вывод не сформирован	Facts available; AI conclusion not generated	Фактілер қолжетімді; AI қорытындысы жасалмады
+Не удалось подготовить данные для расследования	Could not prepare investigation data	Зерттеу деректерін дайындау мүмкін болмады
+Проверьте исходные файлы и конфигурацию AI на сервере.	Check the source files and server AI settings.	Бастапқы файлдар мен сервердегі AI баптауларын тексеріңіз.
+Что изменится без этого участника?	What changes without this participant?	Бұл қатысушысыз не өзгереді?
+Проверяю копию наблюдаемого графа	Checking a copy of the observed graph	Бақыланған граф көшірмесі тексерілуде
+Не удалось выполнить локальную симуляцию. Проверьте исходные данные.	Local simulation failed. Check the source data.	Жергілікті модельдеу орындалмады. Бастапқы деректерді тексеріңіз.
+Локальная структурная проверка, без API. Она не доказывает экономический эффект, контроль или прекращение переводов.	Local structural check without API calls. It does not prove economic impact, control or cessation of transfers.	API-сыз жергілікті құрылымдық тексеру. Ол экономикалық әсерді, бақылауды немесе аударымдардың тоқтауын дәлелдемейді.
+Модель: {v0} · версия {v1} · исходное время {v2} с · кеш: {v3}	Model: {v0} · version {v1} · original runtime {v2} s · cache: {v3}	Модель: {v0} · нұсқа {v1} · бастапқы уақыт {v2} с · кеш: {v3}
+Получение из кеша: {v0} с; новый API-запрос не выполнялся.	Cache retrieval: {v0} s; no new API request was made.	Кештен алу: {v0} с; жаңа API сұрауы жасалған жоқ.
+"Токены, сообщённые API: "	"Tokens reported by API: "	"API хабарлаған токендер: "
+ (сумма ответов с usage).	 (sum of replies reporting usage).	 (usage бар жауаптардың қосындысы).
+Интерпретация AI	AI interpretation	AI түсіндірмесі
+Интерпретация модели не является установленным фактом. Схема JSON не гарантирует достоверность текста.	The model's interpretation is not an established fact. JSON validation does not guarantee textual accuracy.	Модель түсіндірмесі анықталған факт емес. JSON тексеруі мәтіннің дұрыстығына кепілдік бермейді.
+Подтверждающие наблюдения	Supporting observations	Растайтын бақылаулар
+Противоречащие наблюдения	Contradicting observations	Қайшы бақылаулар
+Не приведены. Это не означает отсутствия других объяснений.	None provided. Other explanations may still exist.	Келтірілмеген. Бұл басқа түсіндірмелер жоқ дегенді білдірмейді.
+[Источник: {v0}](#{v1})	[Source: {v0}](#{v1})	[Дереккөз: {v0}](#{v1})
+"Предположение: "	"Assumption: "	"Болжам: "
+"Недостающие данные: "	"Missing data: "	"Жетіспейтін деректер: "
+"Следующий шаг: "	"Next step: "	"Келесі қадам: "
+"Выполненные проверки: "	"Completed checks: "	"Орындалған тексерулер: "
+Вычисленные факты и источники	Computed facts and sources	Есептелген фактілер мен дереккөздер
+Журнал инструментальных проверок	Tool execution log	Құралдар арқылы тексеру журналы
+Ограничения данных	Data limitations	Деректер шектеулері
+Скачать AI-записку в Markdown	Download AI report as Markdown	AI есебін Markdown түрінде жүктеу
+Скачать реестр доказательств	Download evidence registry	Дәлелдер тізілімін жүктеу
+Исходных строк: {v0}. Индексы от нуля в файлах указанной версии. На экране первые 200.	Source rows: {v0}. Zero-based indices in the specified data version. Showing the first 200.	Бастапқы жолдар: {v0}. Көрсетілген нұсқа файлдарында индекстер нөлден басталады. Алғашқы 200 жол көрсетілген.
+AI-вывод не сформирован.	AI conclusion not generated.	AI қорытындысы жасалмады.
+да	yes	иә
+нет	no	жоқ
+поддерживается наблюдениями	supported by observations	бақылаулармен расталады
+AI выключен. Для подключения задайте AI_ENABLED=true.	AI is disabled. Set AI_ENABLED=true to enable it.	AI өшірілген. Қосу үшін AI_ENABLED=true орнатыңыз.
+Добавьте AI_API_KEY в окружение сервера.	Add AI_API_KEY to the server environment.	Сервер ортасына AI_API_KEY қосыңыз.
+Укажите AI_MODEL — идентификатор модели вашего провайдера.	Set AI_MODEL to your provider's model identifier.	AI_MODEL мәніне провайдер моделінің идентификаторын орнатыңыз.
+Проверьте формат AI_BASE_URL.	Check the AI_BASE_URL format.	AI_BASE_URL пішімін тексеріңіз.
+AI_BASE_URL должен быть HTTPS-адресом API без пароля, параметров и фрагмента.	AI_BASE_URL must be an HTTPS API URL without credentials, query parameters or a fragment.	AI_BASE_URL құпиясөзсіз, сұрау параметрлерінсіз және фрагментсіз HTTPS API мекенжайы болуы керек.
+Проверьте AI_BASE_URL и AI_MODEL: секрет должен находиться только в AI_API_KEY.	Check AI_BASE_URL and AI_MODEL: secrets belong only in AI_API_KEY.	AI_BASE_URL және AI_MODEL тексеріңіз: құпия кілт тек AI_API_KEY ішінде болуы керек.
+Лимиты AI: дедлайн 1–180 секунд, инструменты 3–12, ответ 512–8000 токенов.	AI limits: deadline 1–180 seconds, tools 3–12, response 512–8000 tokens.	AI шектері: мерзім 1–180 секунд, құралдар 3–12, жауап 512–8000 токен.
+Проверьте числовые настройки AI_TIMEOUT_SECONDS, AI_MAX_TOOL_CALLS и AI_MAX_OUTPUT_TOKENS.	Check numeric settings AI_TIMEOUT_SECONDS, AI_MAX_TOOL_CALLS and AI_MAX_OUTPUT_TOKENS.	AI_TIMEOUT_SECONDS, AI_MAX_TOOL_CALLS және AI_MAX_OUTPUT_TOKENS сандық баптауларын тексеріңіз.
+Собираю вычисленные факты выбранного клиента	Collecting computed facts for this participant	Таңдалған қатысушының есептелген фактілері жиналуда
+Найден завершённый проверенный результат в кеше	Found a completed, validated result in cache	Кештен аяқталған, тексерілген нәтиже табылды
+Модель формирует гипотезы и выбирает поддержку и контрпроверки	The model is planning hypotheses, supporting checks and counterchecks	Модель болжамдарды, растайтын және қарсы тексерулерді жоспарлауда
+Модель сопоставляет подтверждения, противоречия и альтернативы	The model is comparing support, contradictions and alternatives	Модель растауларды, қайшылықтарды және баламаларды салыстыруда
+Проверяю ссылки, gid, периоды и точные значения утверждений	Validating references, gids, periods and exact claim values	Сілтемелер, gid, кезеңдер және тұжырымдардың нақты мәндері тексерілуде
+Исправляю неверный формат ответа: единственная повторная попытка	Repairing an invalid response: the only retry	Қате жауап пішімі түзетілуде: жалғыз қайталау әрекеті
+AI-вывод не прошёл проверку структуры и доказательств. Доступны только вычисленные факты.	AI output failed structural and evidence validation. Only computed facts are available.	AI қорытындысы құрылым мен дәлелдер тексеруінен өтпеді. Тек есептелген фактілер қолжетімді.
+Не удалось сформировать AI-вывод. Доступные вычисленные факты сохранены.	Could not generate an AI conclusion. Available computed facts have been preserved.	AI қорытындысын жасау мүмкін болмады. Қолжетімді есептелген фактілер сақталды.
+Результат проверен, но не удалось сохранить его в кеш.	Result validated, but could not be cached.	Нәтиже тексерілді, бірақ кешке сақтау мүмкін болмады.
+Узлы для проверки	Participants to review	Тексерілетін қатысушылар
+Приоритетные узлы	Priority participants	Басымдығы жоғары қатысушылар
+Кандидаты для проверки в наблюдаемом графе	Review candidates in the observed graph	Бақыланған графтағы тексеруге үміткерлер
+Поиск по ID узла	Search by participant ID	Қатысушы ID бойынша іздеу
+Фильтр по роли	Filter by role	Рөл бойынша сүзу
+Все роли	All roles	Барлық рөлдер
+Таблица приоритетных узлов	Priority participants table	Басымдығы жоғары қатысушылар кестесі
+ID УЗЛА	PARTICIPANT ID	ҚАТЫСУШЫ ID
+РОЛЬ · ГИПОТЕЗА	ROLE · HYPOTHESIS	РӨЛ · БОЛЖАМ
+ВХОДЯЩАЯ СУММА	INCOMING AMOUNT	КІРІС СОМАСЫ
+ПРИОРИТЕТ	PRIORITY	БАСЫМДЫҚ
+ДЕЙСТВИЕ	ACTION	ӘРЕКЕТ
+Сбросить фильтры	Reset filters	Сүзгілерді қалпына келтіру
+Предыдущая страница	Previous page	Алдыңғы бет
+Следующая страница	Next page	Келесі бет
+Приоритет — очерёдность ручной проверки, а не вероятность правонарушения.	Priority is the order of manual review, not the probability of wrongdoing.	Басымдық — қолмен тексеру реті, құқық бұзушылық ықтималдығы емес.
+Открыть узел	Open participant	Қатысушыны ашу
+Позиция	Rank	Орын
+Открыть →	Open →	Ашу →
+Узлы не найдены	No participants found	Қатысушылар табылмады
+Здесь появятся узлы для проверки	Participants to review will appear here	Тексерілетін қатысушылар осында көрсетіледі
+Измените ID или выберите другую роль.	Change the ID or select another role.	ID өзгертіңіз немесе басқа рөлді таңдаңыз.
+Подключите исходный набор и результаты расчёта в разделе «Источник данных».	Connect source data and calculation results in “Data source”.	«Дереккөз» бөлімінде бастапқы деректер мен есептеу нәтижелерін қосыңыз.
+Нет записей	No records	Жазбалар жоқ
+из	 of	ішінен
+узлов	nodes	түйін
+Все суммы и метрики относятся только к наблюдаемому графу.	All amounts and metrics refer only to the observed graph.	Барлық сомалар мен көрсеткіштер тек бақыланған графқа қатысты.
+Даты без времени суток: операции одного дня не доказывают порядок.	Dates have no time of day: same-day operations do not prove sequence.	Күндерде тәулік уақыты жоқ: бір күндегі операциялар реттілікті дәлелдемейді.
+Совместимая по датам цепочка не доказывает движение конкретных денег.	A date-compatible chain does not prove the movement of specific funds.	Күндері сәйкес тізбек нақты ақшаның қозғалысын дәлелдемейді.
+Входящие seed неполны; отсутствие исходящих на глубине четыре может быть границей выборки.	Incoming seed transfers are incomplete; no outgoing transfers at depth four may reflect the sample boundary.	Бастапқы қатысушылардың кірістері толық емес; төртінші тереңдікте шығыстың болмауы іріктеме шекарасынан болуы мүмкін.
+Роль — гипотеза, приоритет — очередность проверки, не вероятность правонарушения.	Role is a hypothesis; priority is review order, not a probability of wrongdoing.	Рөл — болжам, басымдық — тексеру реті, құқық бұзушылық ықтималдығы емес.
+Пересекающиеся паттерны нельзя складывать без устранения двойного учёта.	Overlapping patterns cannot be added without removing double counting.	Қайталанатын үлгілерді қосарлы есепті жоймай қосуға болмайды.
+Кейс ограничен обходом до четырёх шагов и восьмидесяти узлов, отбор по возрастанию gid; срезы могут быть неполными.	The case is limited to four steps and eighty nodes, selected by ascending gid; subsets may be incomplete.	Іс төрт қадаммен және сексен түйінмен шектеледі, gid өсу ретімен таңдалады; кесінділер толық болмауы мүмкін.
+есть противоречия	contradictions found	қайшылықтар бар
+недостаточно данных	insufficient data	деректер жеткіліксіз
+Истёк общий дедлайн расследования.	Investigation deadline exceeded.	Зерттеу мерзімі аяқталды.
+Сетевой процесс не смог получить ответ API.	The network process could not obtain an API response.	Желілік процесс API жауабын ала алмады.
+API вернул неверный JSON.	The API returned invalid JSON.	API қате JSON қайтарды.
+Достигнут лимит входного контекста AI.	AI input context limit reached.	AI кіріс контекстінің шегіне жетті.
+Не удалось выполнить запрос к API.	Could not complete the API request.	API сұрауын орындау мүмкін болмады.
+Истёк таймаут запроса к API.	API request timed out.	API сұрауының күту уақыты аяқталды.
+Провайдер ограничил частоту запросов; повторы исчерпаны.	Provider rate limit reached; retries exhausted.	Провайдердің сұрау жиілігі шегіне жетті; қайталау әрекеттері аяқталды.
+API недоступен или вернул неподдерживаемый ответ. Проверьте модель, ключ и endpoint на сервере.	API unavailable or unsupported response. Check the model, key and endpoint on the server.	API қолжетімсіз немесе жауап қолдау көрсетілмейтін пішімде. Сервердегі модельді, кілтті және endpoint тексеріңіз.
+API не вернул текстовый ответ в формате Chat Completions.	The API did not return a Chat Completions text response.	API Chat Completions пішімінде мәтіндік жауап қайтармады.
+Ответ AI превышает лимит размера.	AI response exceeds the size limit.	AI жауабы өлшем шегінен асты.
+"Ищу противоречия: "	"Looking for contradictions: "	"Қайшылықтарды іздеу: "
+"Проверяю гипотезу: "	"Checking hypothesis: "	"Болжамды тексеру: "
+Центральность	Centrality	Орталықтық
+Объём	Volume	Көлем
+Структура	Structure	Құрылым
+Несколько seed	Multiple seeds	Бірнеше бастапқы қатысушы
+Временное окно	Time window	Уақыт аралығы
+Посредничество и SCC	Betweenness and SCC	Делдалдық және SCC
+Сила роли	Role strength	Рөл күші
+Компонента	Component	Компонент
+Вклад в приоритет	Priority contribution	Басымдыққа үлес
+Вход в аккаунт	Signed in	Аккаунтқа кірді
+Создан аккаунт	Account created	Аккаунт жасалды
+Выход из аккаунта	Signed out	Аккаунттан шықты
+Выход из всех сессий	All sessions signed out	Барлық сессиядан шықты
+Восстановлен доступ	Access restored	Кіру қалпына келтірілді
+Изменён пароль	Password changed	Құпиясөз өзгертілді
+Открыт узел	Participant opened	Қатысушы ашылды
+Разрешаю отправлять выбранные цепочки во внешний AI API по моему нажатию	I allow selected chains to be sent to the external AI API when I click	Мен басқанда таңдалған тізбектерді сыртқы AI API-ға жіберуге рұқсат беремін
+Сначала разрешите отправку данных; затем нажмите кнопку расследования.	Allow data submission, then click the investigation button.	Алдымен деректерді жіберуге рұқсат беріңіз, содан кейін зерттеу түймесін басыңыз.
+АНАЛИТИКА ДЕНЕЖНЫХ ПОТОКОВ	MONEY FLOW ANALYTICS	АҚША АҒЫНДАРЫН ТАЛДАУ
+РАБОЧЕЕ ПРОСТРАНСТВО АНАЛИТИКА	ANALYST WORKSPACE	ТАЛДАУШЫНЫҢ ЖҰМЫС КЕҢІСТІГІ
+Весь поток.	The full flow.	Бүкіл ағын.
+Ясная картина.	A clear picture.	Айқын көрініс.
+◇ &nbsp; Граф переводов	◇ Transfer graph	◇ Аударымдар графы
+▤ &nbsp; Личные проверки	▤ Personal reviews	▤ Жеке тексерулер
+↗ &nbsp; Проверяемые выводы	↗ Verifiable findings	↗ Тексерілетін қорытындылар
+FREEDOM FLOW / ЛИЧНЫЙ КАБИНЕТ	FREEDOM FLOW / YOUR ACCOUNT	FREEDOM FLOW / ЖЕКЕ КАБИНЕТ
+Добро пожаловать	Welcome	Қош келдіңіз
+Войдите в аккаунт или создайте новое рабочее пространство.	Sign in or create a new workspace.	Аккаунтқа кіріңіз немесе жаңа жұмыс кеңістігін жасаңыз.
+От отдельных переводов — к пониманию связей. Исследуйте денежные потоки и сохраняйте выводы в своём рабочем пространстве.	From individual transfers to understanding connections. Explore money flows and save findings in your workspace.	Жеке аударымдардан байланыстарды түсінуге дейін. Ақша ағындарын зерттеп, қорытындыларды жұмыс кеңістігіңізде сақтаңыз.

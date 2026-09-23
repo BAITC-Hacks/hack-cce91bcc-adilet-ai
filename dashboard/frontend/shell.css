@@ -172,3 +172,16 @@ h2 { font-size: 23px !important; } h3 { font-size: 20px !important; }
 
 .mg-welcome-head .mg-brand strong { color:#12384b; }
 .mg-welcome-head .mg-brand small { letter-spacing:.9px; font-size:9px; }
+
+
+/* Native language and profile controls, available before and after sign-in. */
+.st-key-account_toolbar { padding: 42px 0 10px; border-bottom: 1px solid #e0e8ef; margin-bottom: 12px; }
+.st-key-account_toolbar [data-testid="stHorizontalBlock"] { flex-wrap: nowrap; align-items: center; }
+.st-key-account_toolbar [data-testid="stColumn"] { min-width: 0; }
+.st-key-profile_menu button { border-radius: 50px; color: #1e4259; background: #deedf2; }
+@media (max-width: 640px) {
+  .st-key-account_toolbar [data-testid="stColumn"]:nth-child(1) { flex: 1 1 15%; width: 15%; }
+  .st-key-account_toolbar [data-testid="stColumn"]:nth-child(2) { flex: 1 1 60%; width: 60%; }
+  .st-key-account_toolbar [data-testid="stColumn"]:nth-child(3) { flex: 1 1 25%; width: 25%; }
+  .st-key-account_toolbar [data-testid="stColumn"]:nth-child(1) [data-testid="stCaptionContainer"] { display: none; }
+}

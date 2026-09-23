@@ -334,3 +334,26 @@ def test_missing_model_and_invalid_endpoint_errors_are_safe(settings):
         with pytest.raises(AIError) as error:
             changed.validate()
         assert settings.api_key not in str(error.value)
+
+
+def test_langgraph_execution_and_language_cache_separation(make_data, settings, tmp_path, monkeypatch):
+    from langgraph.graph.state import CompiledStateGraph
+    invoked = []
+    original = CompiledStateGraph.invoke
+    def invoke(self, state, config=None, **kwargs):
+        invoked.append(config['recursion_limit'])
+        return original(self, state, config, **kwargs)
+    monkeypatch.setattr(CompiledStateGraph, 'invoke', invoke)
+    store = Store(tmp_path / 'languages.db')
+    cache = ResultCache(store, store.user('test', 'language', '', 'Test'))
+    data = make_data()
+    provider = MockProvider()
+    for locale, prompt_text in [('ru', 'по-русски'), ('en', 'на английском языке'), ('kk', 'на казахском языке')]:
+        config = replace(settings, language=locale)
+        result = investigate(data, '2', config, cache, provider)
+        assert result['ok'] and result['orchestration'] == 'langgraph'
+        assert result['language'] == locale and not result['cache_hit']
+        assert prompt_text in provider.calls[-1][0]['content']
+        assert investigate(data, '2', config, cache, provider)['cache_hit']
+    assert invoked == [settings.max_tool_calls + 4] * 3
+    assert len(provider.calls) == 6
