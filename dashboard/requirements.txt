@@ -1,0 +1,3 @@
+# Install after the root requirements.txt. UI dependencies only.
+streamlit>=1.49,<2
+plotly>=6,<7

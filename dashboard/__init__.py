@@ -1,0 +1,1 @@
+"""MoneyGraph read-only dashboard."""
