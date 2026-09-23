@@ -97,3 +97,20 @@ h2 { font-size: 23px !important; } h3 { font-size: 20px !important; }
 .st-key-auth_center [data-testid="stForm"] { border:0; padding:0; }
 .st-key-auth_center [data-testid="stRadio"] { margin:10px 0 18px; }
 @media(max-width:640px) { .mg-welcome-copy { padding-top:30px; } .mg-welcome-head small { display:none; } .mg-welcome-features,.mg-stack-grid { grid-template-columns:1fr; gap:16px; } .mg-welcome-features { padding:30px 0; } .st-key-auth_center { padding:22px; margin-top:20px; } .mg-welcome-copy h1 { letter-spacing:-1px; } }
+/* Guided investigation: clear steps, visible focus and readable supporting text. */
+.mg-guide { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:12px 0 28px; }
+.mg-guide>div { padding:20px; background:#eaf4f2; border:1px solid #d8e9e5; border-radius:14px; }
+.mg-guide span { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; margin-right:10px; border-radius:50%; background:#167d70; color:white; font-size:12px; }
+.mg-guide b { font-size:14px; color:#153b47; }
+.mg-guide p { margin:10px 0 0; font-size:13px; color:#506e7b; line-height:1.6; }
+.mg-auth-brand { color:#147d71; font-size:20px; font-weight:700; margin:10px 0 18px; }
+[data-testid="stCaptionContainer"], .mg-heading p { color:#546d80; }
+[data-testid="stBaseButton-primary"], [data-testid="stBaseButton-primaryFormSubmit"] { background:#117c6d; border-color:#117c6d; }
+.stMain button:focus-visible, .stMain input:focus-visible { outline:3px solid #159c89; outline-offset:3px; }
+.stMain [data-testid="stMetricValue"] { overflow-wrap:anywhere; }
+@media(max-width:900px) { .mg-guide { grid-template-columns:1fr; gap:10px; } .mg-guide>div { padding:16px; } }
+.st-key-summary_metrics [data-testid="stColumn"] [data-testid="stLayoutWrapper"] { padding:20px; }
+.st-key-summary_metrics [data-testid="stMetricLabel"] { margin-bottom:8px; }
+.stMain [data-testid="stMetricValue"]>div { white-space:normal; font-size:clamp(22px,2.2vw,32px); line-height:1.3; }
+[data-testid="stSidebar"] [data-testid="stText"] { overflow-wrap:anywhere; font-size:14px; }
+.stMain [data-testid="stCaptionContainer"] p { color:#546d80; }

@@ -76,6 +76,6 @@ def landing():
             <div><b>Python · pandas · NumPy</b><p>Подготовка данных и расчёт признаков</p></div>
             <div><b>NetworkX</b><p>Граф, центральности и кластеры связей</p></div>
             <div><b>Streamlit · Plotly</b><p>Интерактивное рабочее пространство</p></div>
-            <div><b>SQLite · Parquet</b><p>Аккаунты, сохранённые проверки и данные</p></div></div>
+            <div><b>MariaDB · Parquet</b><p>Общий источник аналитики, аккаунтов и проверок</p></div></div>
             <footer>MoneyGraph · Прототип команды для HackAlem AI<br>
             Аналитические роли — гипотезы для проверки, а не доказательство нарушения.</footer></section>''')

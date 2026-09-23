@@ -1,4 +1,4 @@
-"""SQLite credentials and revocable server-side sessions for local accounts."""
+"""Hashed credentials and revocable sessions in the selected workspace store."""
 import hashlib
 import hmac
 import re
@@ -58,6 +58,9 @@ class Accounts:
     def __init__(self, store, clock=time.time):
         self.store = store
         self.clock = clock
+        if store.backend == 'mariadb':
+            # MariaStore owns its namespaced schema, including remembered sessions.
+            return
         with store.connect() as db:
             db.executescript('''
                 CREATE TABLE IF NOT EXISTS credentials (
@@ -139,6 +142,7 @@ class Accounts:
             return None
         now = self.clock()
         with self.store.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
             row = db.execute('''SELECT users.id,users.email,users.name FROM sessions
                 JOIN users ON users.id=sessions.user_id
                 WHERE token_hash=? AND expires_at>? AND (remembered=1 OR last_seen>?)''',
@@ -149,6 +153,7 @@ class Accounts:
 
     def logout(self, token, all_sessions=False):
         with self.store.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
             row = db.execute('SELECT user_id FROM sessions WHERE token_hash=?', (token_hash(token),)).fetchone()
             if row:
                 if all_sessions:

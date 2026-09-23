@@ -48,6 +48,13 @@ def test_client_credentials_private_and_error_redacted(monkeypatch):
     assert not paths[0].exists()
 
 
+@pytest.mark.skipif(
+    not all(Path(path).is_file() for path in (
+        'data/nodes.parquet', 'data/edges.parquet', 'data/transactions.parquet',
+        'out/nodes_roles.csv', 'out/clusters.csv', 'out/top_nodes.csv',
+    )),
+    reason='Private dataset or pipeline outputs absent',
+)
 def test_real_snapshot_deterministic_and_all_rows_present():
     edges, nodes, tx = load('data')
     frames = tuple(pd.read_csv(f'out/{name}.csv', float_precision='round_trip') for name in ('nodes_roles', 'clusters', 'top_nodes'))

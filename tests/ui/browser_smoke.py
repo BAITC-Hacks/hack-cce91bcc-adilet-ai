@@ -1,0 +1,107 @@
+"""Optional browser QA against an isolated test workspace, never production accounts.
+
+Start with MONEYGRAPH_DB=/tmp/moneygraph-browser.sqlite3 streamlit run dashboard/app.py
+Run: python tests/ui/browser_smoke.py --url http://127.0.0.1:8510 --out /tmp/moneygraph-ui
+Requires playwright and its Chromium browser (development tools only).
+"""
+import argparse
+from pathlib import Path
+from uuid import uuid4
+from playwright.sync_api import sync_playwright, expect
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--url', default='http://127.0.0.1:8510')
+    parser.add_argument('--out', default='/tmp/moneygraph-ui')
+    args = parser.parse_args()
+    output = Path(args.out)
+    output.mkdir(parents=True, exist_ok=True)
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        context = browser.new_context(viewport={'width': 1440, 'height': 1050})
+        page = context.new_page()
+        errors = []
+        page.on('pageerror', lambda error: errors.append(str(error)))
+        page.goto(args.url)
+        expect(page.get_by_role('button', name='Создать аккаунт', exact=True)).to_be_visible(timeout=30000)
+        expect(page.get_by_text('Прозрачная аналитика. Понятные инструменты.', exact=True)).to_be_visible()
+        page.locator('[data-testid=stImage] img').wait_for()
+        page.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
+        page.screenshot(path=output / 'welcome-desktop.png', full_page=True)
+        page.get_by_role('button', name='Создать аккаунт', exact=True).click()
+        expect(page.get_by_role('textbox', name='Имя', exact=True)).to_be_visible()
+        email = f'qa-{uuid4().hex[:12]}@example.test'
+        password = 'browser test long password phrase'
+        page.get_by_role('textbox', name='Имя', exact=True).fill('Тест интерфейса')
+        page.get_by_role('textbox', name='Email', exact=True).fill(email)
+        page.get_by_role('textbox', name='Пароль', exact=True).fill(password)
+        page.get_by_role('textbox', name='Повторите пароль', exact=True).fill('mismatch')
+        page.get_by_role('button', name='Создать аккаунт', exact=True).click()
+        expect(page.get_by_text('Пароли не совпадают.', exact=True)).to_be_visible()
+        expect(page.get_by_role('textbox', name='Email', exact=True)).to_have_value(email)
+        page.get_by_role('textbox', name='Повторите пароль', exact=True).fill(password)
+        page.get_by_role('button', name='Создать аккаунт', exact=True).click()
+        page.get_by_role('button', name='Я сохранил код — перейти ко входу').click()
+        expect(page.get_by_role('textbox', name='Email', exact=True)).to_be_visible()
+        page.screenshot(path=output / 'login-desktop.png', full_page=True)
+        page.get_by_role('textbox', name='Email', exact=True).fill(email)
+        page.get_by_role('textbox', name='Пароль', exact=True).fill(password)
+        page.get_by_text('Запомнить меня на 30 дней', exact=True).click()
+        page.get_by_role('button', name='Войти', exact=True).click()
+        expect(page.get_by_text('Мониторинг транзакций', exact=True).last).to_be_visible(timeout=30000)
+        expect(page.get_by_role('button', name='arrow_forward Исследовать узел', exact=True)).to_be_visible(timeout=30000)
+        expect(page.locator('[data-testid="stException"]')).to_have_count(0)
+        # Saved token must survive a full page reload, not only a Streamlit rerun.
+        page.wait_for_function("localStorage.getItem('moneygraph.session.v1') !== null")
+        page.reload()
+        expect(page.get_by_role('button', name='arrow_forward Исследовать узел', exact=True)).to_be_visible(timeout=30000)
+        expect(page.locator('[data-testid=stApp]')).to_have_attribute('data-test-script-state', 'notRunning', timeout=30000)
+        expect(page.locator('[data-testid=stMetricValue]').first).to_contain_text('2 248')
+        page.screenshot(path=output / 'overview-desktop.png', full_page=True)
+        page.get_by_role('button', name='arrow_forward Исследовать узел', exact=True).click()
+        expect(page.get_by_role('textbox', name='Поиск по полному gid')).to_be_visible(timeout=30000)
+        page.get_by_role('textbox', name='Заметка аналитика').fill('Проверить источники поступлений. Тест интерфейса.')
+        page.get_by_role('button', name='save Сохранить в мои проверки').click()
+        expect(page.get_by_text('Проверка сохранена. Она будет доступна после перезапуска приложения.')).to_be_visible()
+        expect(page.locator('[data-testid=stApp]')).to_have_attribute('data-test-script-state', 'notRunning', timeout=30000)
+        page.locator('[data-testid=stMain]').evaluate('(el) => el.scrollTo(0, 0)')
+        page.screenshot(path=output / 'node-desktop.png', full_page=True)
+        page.get_by_role('textbox', name='Поиск по полному gid').fill('missing')
+        page.get_by_role('textbox', name='Поиск по полному gid').press('Enter')
+        expect(page.get_by_text('gid не найден.', exact=False)).to_be_visible()
+        page.get_by_role('button', name='Открыть первого в списке приоритета').click()
+        expect(page.get_by_role('textbox', name='Заметка аналитика')).to_have_value('Проверить источники поступлений. Тест интерфейса.')
+        page.get_by_role('button', name='logout Выйти', exact=True).click()
+        expect(page.get_by_role('textbox', name='Email', exact=True)).to_be_visible()
+        page.reload()
+        expect(page.get_by_role('button', name='Создать аккаунт', exact=True)).to_be_visible(timeout=30000)
+        assert not page.evaluate("localStorage.getItem('moneygraph.session.v1')")
+        mobile = context.new_page()
+        mobile.set_viewport_size({'width': 390, 'height': 844})
+        mobile.goto(args.url)
+        expect(mobile.get_by_role('button', name='arrow_forward Войти', exact=True)).to_be_visible(timeout=30000)
+        expect(mobile.get_by_text('Прозрачная аналитика. Понятные инструменты.', exact=True)).to_be_visible()
+        mobile.wait_for_function("Array.from(document.images).every(i => i.complete && i.naturalWidth > 0)")
+        mobile.screenshot(path=output / 'welcome-mobile.png', full_page=True)
+        assert mobile.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1')
+        mobile.get_by_role('button', name='arrow_forward Войти', exact=True).click()
+        expect(mobile.get_by_role('textbox', name='Email', exact=True)).to_be_visible()
+        mobile.screenshot(path=output / 'login-mobile.png', full_page=True)
+        assert mobile.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1')
+        mobile.get_by_role('textbox', name='Email', exact=True).fill(email)
+        mobile.get_by_role('textbox', name='Пароль', exact=True).fill(password)
+        mobile.get_by_role('button', name='Войти', exact=True).click()
+        expect(mobile.get_by_role('button', name='arrow_forward Исследовать узел', exact=True)).to_be_visible(timeout=30000)
+        expect(mobile.locator('[data-testid=stApp]')).to_have_attribute('data-test-script-state', 'notRunning', timeout=30000)
+        mobile.locator('[data-testid=stMain]').evaluate('(el) => el.scrollTo(0, 0)')
+        expect(mobile.locator('[data-testid=stMetricValue]').first).to_contain_text('2 248')
+        mobile.screenshot(path=output / 'overview-mobile.png', full_page=True)
+        assert mobile.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1')
+        assert not errors, errors
+        browser.close()
+        print('PASS: registration validation, login, remember/reload, save, invalid gid, logout, desktop and mobile; screenshots:', output)
+
+
+if __name__ == '__main__':
+    main()
