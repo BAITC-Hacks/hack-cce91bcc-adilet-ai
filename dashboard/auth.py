@@ -1,6 +1,7 @@
 """Email/password UI backed by validated, revocable SQLite sessions."""
 import streamlit as st
 from dashboard.accounts import Accounts, AccountError
+from dashboard.ui import brand_html
 
 
 def clear_session():
@@ -16,20 +17,20 @@ def require_identity(store):
     if st.session_state.get('_auth_token'):
         clear_session()
         st.info('Сессия завершена. Войдите снова.')
-    left, right = st.columns([3, 2], gap='large')
+    left, right = st.columns([1, 1.15], gap='large')
     with left:
-        st.html('''<div class="mg-login">
-            <div class="mg-brand"><span class="mg-logo" aria-hidden="true">◈</span>
-              <div><strong>MoneyGraph</strong><small>ANALYTICS / WORKSPACE</small></div></div>
+        st.html('<div class="mg-login">' + brand_html() + '''
             <span class="mg-login-tag">РАБОЧЕЕ ПРОСТРАНСТВО АНАЛИТИКА</span>
-            <h1>Деньги движутся.<br>Связи становятся видны.</h1>
-            <p>Исследуйте переводы, находите связи и сохраняйте результаты
-            в личном рабочем пространстве.</p>
+            <h1>Весь поток.<br><span>Ясная картина.</span></h1>
+            <p>От отдельных переводов — к пониманию связей.
+            Исследуйте денежные потоки и сохраняйте выводы в своём рабочем пространстве.</p>
             <div class="mg-login-grid"><span>◇ &nbsp; Граф переводов</span>
             <span>▤ &nbsp; Личные проверки</span><span>↗ &nbsp; Проверяемые выводы</span></div>
             </div>''')
-    with right, st.container(border=True):
-        st.subheader('Ваше рабочее пространство')
+    with right, st.container(border=True, key='auth_card'):
+        st.html('<div class="ff-access-label">FREEDOM FLOW / ЛИЧНЫЙ КАБИНЕТ</div>')
+        st.subheader('Добро пожаловать')
+        st.caption('Войдите в аккаунт или создайте новое рабочее пространство.')
         if st.session_state.get('_recovery_code'):
             st.success('Пароль сохранён. Сохраните резервный код перед входом.')
             st.write('Этот код позволит восстановить доступ без почты. Он показывается только сейчас; храните его отдельно от пароля.')
