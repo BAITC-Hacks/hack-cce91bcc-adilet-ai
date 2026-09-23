@@ -2,6 +2,7 @@
 import streamlit as st
 from dashboard.welcome import landing, browser_session
 from dashboard.accounts import Accounts, AccountError
+from dashboard.ui import brand_html
 
 
 def clear_session():
@@ -30,12 +31,23 @@ def require_identity(store):
     if not st.session_state.get('_auth_page'):
         landing()
         st.stop()
-    with st.container(key='auth_center'):
+    left, right = st.columns([1, 1.15], gap='large')
+    with left:
+        st.html('<div class="mg-login">' + brand_html() + '''
+            <span class="mg-login-tag">РАБОЧЕЕ ПРОСТРАНСТВО АНАЛИТИКА</span>
+            <h1>Весь поток.<br><span>Ясная картина.</span></h1>
+            <p>От отдельных переводов — к пониманию связей.
+            Исследуйте денежные потоки и сохраняйте выводы в своём рабочем пространстве.</p>
+            <div class="mg-login-grid"><span>◇ &nbsp; Граф переводов</span>
+            <span>▤ &nbsp; Личные проверки</span><span>↗ &nbsp; Проверяемые выводы</span></div>
+            </div>''')
+    with right, st.container(border=True, key='auth_card'):
+        st.html('<div class="ff-access-label">FREEDOM FLOW / ЛИЧНЫЙ КАБИНЕТ</div>')
+        st.subheader('Добро пожаловать')
+        st.caption('Войдите в аккаунт или создайте новое рабочее пространство.')
         if st.button('На главную', icon=':material/arrow_back:', key='auth_back'):
             st.session_state.pop('_auth_page', None)
             st.rerun()
-        st.html('<div class="mg-auth-brand">◈ &nbsp; MoneyGraph</div>')
-        st.subheader('Ваше рабочее пространство')
         if st.session_state.get('_recovery_code'):
             st.success('Пароль сохранён. Сохраните резервный код перед входом.')
             st.write('Этот код позволит восстановить доступ без почты. Он показывается только сейчас; храните его отдельно от пароля.')

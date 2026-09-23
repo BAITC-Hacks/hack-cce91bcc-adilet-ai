@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--data', default='./data')
 parser.add_argument('--out', default='./out')
 args, _ = parser.parse_known_args()
-st.set_page_config(page_title='MoneyGraph · Рабочее пространство', page_icon=':material/hub:', layout='wide')
+st.set_page_config(page_title='Freedom Flow · Рабочее пространство', page_icon=str(Path(__file__).parent / 'frontend/freedom-logo.png'), layout='wide')
 apply_theme()
 try:
     store = open_store()

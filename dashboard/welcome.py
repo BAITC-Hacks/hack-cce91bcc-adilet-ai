@@ -2,6 +2,7 @@
 from pathlib import Path
 import streamlit as st
 import streamlit.components.v2 as components
+from dashboard.ui import brand_html
 
 ASSETS = Path(__file__).parent / 'frontend'
 
@@ -54,7 +55,7 @@ def _open(mode):
 
 def landing():
     with st.container(key='welcome'):
-        st.html('''<div class="mg-welcome-head"><span>◈ &nbsp; MoneyGraph</span>
+        st.html('<div class="mg-welcome-head">' + brand_html() + '''
             <small>ГРАФ ДЕНЕГ · HACKALEM AI</small></div>
             <div class="mg-welcome-copy"><span class="mg-login-tag">ОТ ПЕРЕВОДА К ПОЛНОЙ КАРТИНЕ</span>
             <h1>У каждого перевода<br>есть продолжение.</h1>
@@ -77,5 +78,5 @@ def landing():
             <div><b>NetworkX</b><p>Граф, центральности и кластеры связей</p></div>
             <div><b>Streamlit · Plotly</b><p>Интерактивное рабочее пространство</p></div>
             <div><b>MariaDB · Parquet</b><p>Общий источник аналитики, аккаунтов и проверок</p></div></div>
-            <footer>MoneyGraph · Прототип команды для HackAlem AI<br>
+            <footer>Freedom Flow · Прототип команды для HackAlem AI<br>
             Аналитические роли — гипотезы для проверки, а не доказательство нарушения.</footer></section>''')

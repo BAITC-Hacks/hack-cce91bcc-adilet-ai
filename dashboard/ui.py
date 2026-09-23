@@ -1,5 +1,6 @@
 """Presentation layer: local styles and a JavaScript investigation table."""
 from html import escape
+from base64 import b64encode
 from pathlib import Path
 
 import streamlit as st
@@ -50,16 +51,22 @@ def apply_theme():
     st.html('<style>' + (ASSETS / 'shell.css').read_text(encoding='utf-8') + '</style>')
 
 
+def brand_html():
+    logo = b64encode((ASSETS / 'freedom-logo.png').read_bytes()).decode('ascii')
+    return ('<div class="mg-brand"><span class="mg-logo">'
+            f'<img src="data:image/png;base64,{logo}" alt="Freedom"></span>'
+            '<div><strong>Freedom <em>Flow</em></strong><small>АНАЛИТИКА ДЕНЕЖНЫХ ПОТОКОВ</small></div></div>')
+
+
 def brand(sidebar=False):
     target = st.sidebar if sidebar else st
-    target.html('<div class="mg-brand"><span class="mg-logo" aria-hidden="true">◈</span>'
-                '<div><strong>MoneyGraph</strong><small>ANALYTICS / WORKSPACE</small></div></div>')
+    target.html(brand_html())
 
 
 def page_header(section, identity, storage_label="Локальное пространство"):
     title = TITLES[section]
     initials = ''.join(word[0] for word in identity['name'].split()[:2]).upper()
-    st.html(f'<div class="mg-topbar"><div>Рабочее пространство <span>/</span> '
+    st.html(f'<div class="mg-topbar"><div>Freedom Flow <span>/</span> '
             f'<strong>{escape(title)}</strong></div><div class="mg-profile">'
             f'<span class="mg-local"><i></i> {escape(storage_label)}</span>'
             f'<span class="mg-avatar" title="{escape(identity["name"], quote=True)}">'
